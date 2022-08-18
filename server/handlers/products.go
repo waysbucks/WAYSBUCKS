@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	productdto "waysbucks/dto/product"
@@ -103,6 +104,7 @@ func (h *handlersProduct) UpdateProduct(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Content-Type", "application/json")
 
 	dataContex := r.Context().Value("dataFile")
+	fmt.Println()
 	filename := dataContex.(string)
 
 	price, _ := strconv.Atoi(r.FormValue("price"))

@@ -3,6 +3,8 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
+import { useMutation } from "react-query";
+import { API } from "../../config/api";
 
 export default function ModalAuth({ show, setShow }) {
   // modal-check
@@ -23,45 +25,88 @@ export default function ModalAuth({ show, setShow }) {
   };
 
   // functional
-  const [login, setLogin] = useState({});
+  // const [login, setLogin] = useState({});
 
-  const handleChange = (e) => {
-    setLogin({
-      ...login,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setLogin({
+  //     ...login,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   // auth
   const navigate = useNavigate();
   const [state, dispatch] = useContext(UserContext);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  //
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    let status;
-    if (email === "admin@mail.com") {
-      status = "admin";
-      navigate("/transaction");
-    } else {
-      status = "customer";
-      navigate("/");
+  const handleSubmit = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const body = JSON.stringify(form);
+
+      const response = await API.post("/login", body, config);
+
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: response.data.data,
+      });
+
+      setShow(false);
+    } catch (error) {
+      console.log(error);
     }
+  });
 
-    const data = {
-      email,
-      password,
-      status,
+  const [register, setRegister] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
+
+  const handleChangeRegister = (e) => {
+    setRegister({
+      ...register,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmitRegister = useMutation(async (e) => {
+    e.preventDefault();
+
+    // Configuration Content-type
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
     };
 
-    dispatch({
-      type: "LOGIN_SUCCESS",
-      payload: data,
-    });
-    setShow(false);
-  };
+    // Data body
+    const body = JSON.stringify(register);
+
+    // Insert data user to database
+    const response = await API.post("/register", body, config);
+
+    // Handling response here
+    setShows(false);
+  });
 
   return (
     <>
@@ -70,7 +115,7 @@ export default function ModalAuth({ show, setShow }) {
           Login
         </button>
         <Modal show={show} onHide={handleClose}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e) => handleSubmit.mutate(e)}>
             <div className="authContainer">
               <h1 className="authTitle">Login</h1>
               <input
@@ -89,9 +134,7 @@ export default function ModalAuth({ show, setShow }) {
                 id="password"
                 onChange={handleChange}
               />
-              <button type="submit" className="btnAuth">
-                Login
-              </button>
+              <button className="btnAuth">Login</button>
               <p className="toRegist">
                 Don't have an account ? Click{" "}
                 <strong onClick={handleSwitchRegister}>Here</strong>
@@ -106,25 +149,33 @@ export default function ModalAuth({ show, setShow }) {
           Register
         </button>
         <Modal show={shows} onHide={handleCloses} id="modalRegister">
-          <form>
+          <form onSubmit={(e) => handleSubmitRegister.mutate(e)}>
             <div className="authContainer">
               <h1 className="authTitle">Register</h1>
               <input
                 type="email"
                 className="inputAuth p-2"
                 placeholder="Email"
+                name="email"
+                onChange={handleChangeRegister}
               />
               <input
                 type="password"
                 className="inputAuth p-2"
                 placeholder="Password"
+                name="password"
+                onChange={handleChangeRegister}
               />
               <input
                 type="text"
                 className="inputAuth p-2"
                 placeholder="Full Name"
+                name="name"
+                onChange={handleChangeRegister}
               />
-              <button className="btnAuth">Register</button>
+              <button className="btnAuth" type="submit">
+                Register
+              </button>
               <p className="toRegist">
                 Already have an account ? Click{" "}
                 <strong onClick={handleSwitchLogin}>Here</strong>
