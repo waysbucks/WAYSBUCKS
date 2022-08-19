@@ -13,7 +13,10 @@ import landing_2 from "../assets/land.2.png";
 
 //fakedata
 import dummyLandingPage from "../DataDummy/dummyLandingPage";
+//
+import {API} from "../config/api"
 
+import { useQuery } from 'react-query';
 // component
 import Navbar from "../components/navbar/navbar";
 
@@ -23,7 +26,12 @@ export default function LandingPage() {
   // modal login
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(true);
-
+  //
+// Fetching product data from database
+let { data: products } = useQuery('productsCache', async () => {
+  const response = await API.get('/products');
+  return response.data.data;
+});
   return (
     <>
       <Navbar setShow={setShow} show={show} />
@@ -62,7 +70,7 @@ export default function LandingPage() {
             <p>Let's Order</p>
           </span>
           <div className={cssModules.landofdown}>
-            {dummyLandingPage?.map((item, index) => (
+            {products?.map((item, index) => (
               <div className={cssModules.card} key={index}>
                 <div className={cssModules.card1}>
                   <Link
@@ -71,11 +79,11 @@ export default function LandingPage() {
                     }
                     onClick={state.isLogin === false ? handleClick : ""}
                   >
-                    <Card.Img variant="top" src={item.productImage} />
+                    <img className={cssModules.imageP}src={item.image} />
                   </Link>
                   <div className={cssModules.card2}>
                     <p className={cssModules.text1}>
-                      {item.productName.substring(0, 20)}
+                      {item.title.substring(0, 20)}
                     </p>
                     <p className={cssModules.text2}>
                       {Rupiah.convert(item.price)}

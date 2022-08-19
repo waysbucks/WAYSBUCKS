@@ -106,18 +106,27 @@ span{
 }
 .imageP{
   width: 100%;
-  border-radius: 10px 0px ;
+  /* height: 10rem; */
+  border: none;
+  border-radius: 10px 10px 0 0 ;
   height: 300px;
 }
 
+.imageP:hover{
+  transform: scale(1.5);
+  width: 100%;
+  height: 60%;
+  margin-bottom: 60px;
+}
+
 .card1{
+  overflow: hidden;
   background-color: #f6dada;
   border-radius: 20px;
   width: 250px;
   height: 400px;
 }
 .card2{
-  /* border: 1px solid red; */
   padding: 0 0 0 10px;
   
 }

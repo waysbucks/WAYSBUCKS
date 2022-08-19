@@ -35,7 +35,9 @@ export default function ModalAuth({ show, setShow }) {
   // };
 
   // auth
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  // _________kogin
   const [state, dispatch] = useContext(UserContext);
   const [form, setForm] = useState({
     email: "",
@@ -75,11 +77,13 @@ export default function ModalAuth({ show, setShow }) {
     }
   });
 
+  // ____________register
   const [register, setRegister] = useState({
     email: "",
     password: "",
     name: "",
   });
+
 
   const handleChangeRegister = (e) => {
     setRegister({

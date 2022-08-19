@@ -13,6 +13,12 @@ import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct"
 import AddToping from "./pages/AddToping";
 import Transaction from "./pages/Transaction";
+import { setAuthToken } from "./config/api";
+
+// Init token on axios every time the app is refreshed
+if (localStorage.token) {
+  setAuthToken(localStorage.token)
+}
 
 
 function App() {
