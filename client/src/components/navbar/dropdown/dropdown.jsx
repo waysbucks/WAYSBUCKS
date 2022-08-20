@@ -29,7 +29,9 @@ export default function Dropdown() {
       title={<img src={Photo} alt="photoProfile" className="navbarPhoto" />}
       className="navImg"
     >
-      <NavDropdown.Item className={status === "customer" ? "" : "d-none"}>
+      <NavDropdown.Item
+        className={state.user.status === "admin" ? "fd" : "customer"}
+      >
         <Link to="/profile" className="navbarItem navbarProfile">
           <img src={Profile} alt="profile" className="d-flex dropdown-img" />
           <p className="d-flex mb-0 dropCust tagProfile">Profile</p>
@@ -37,7 +39,7 @@ export default function Dropdown() {
       </NavDropdown.Item>
 
       <NavDropdown.Item
-        className={status === "admin" ? "mb-2 mt-2 ps-3" : "d-none"}
+        className={state.user.status === "admin" ? "mb-2 mt-2 ps-3" : "fd"}
       >
         <Link to="/add-product" className="navbarItem">
           <img
@@ -50,7 +52,7 @@ export default function Dropdown() {
       </NavDropdown.Item>
 
       <NavDropdown.Item
-        className={status === "admin" ? "mb-2 mt-2 ps-3" : "d-none"}
+        className={state.user.status === "admin" ? "mb-2 mt-2 ps-3" : "fd"}
       >
         <Link to="/add-toping" className="navbarItem">
           <img
