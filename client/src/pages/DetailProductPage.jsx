@@ -93,7 +93,7 @@ export default function DetailProductPage() {
       console.log(response);
       console.log("====================================");
 
-      // navigate("/");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

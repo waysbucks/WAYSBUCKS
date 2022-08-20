@@ -7,6 +7,9 @@ import Rupiah from "rupiah-format";
 import ModalTransaction from "../components/modal/ModalTransaction";
 import Navbar from "../components/navbar/navbar";
 
+//
+import { API } from "../config/api";
+import { useQuery } from "react-query";
 // fakeData
 import dummyTransaction from "../DataDummy/dummyTransaction";
 
@@ -21,6 +24,14 @@ export default function Transaction() {
   };
   const handleClose = () => setShowTrans(false);
 
+  // Fetching product data from database
+let { data: transactions } = useQuery('transactionsCache', async () => {
+  const response = await API.get('/transactions');
+  return response.data.data;
+
+  
+});
+console.log(transactions);
   return (
     <>
       <Navbar />
@@ -39,13 +50,13 @@ export default function Transaction() {
               </tr>
             </thead>
             <tbody>
-              {dummyTransaction?.map((item, index) => (
+              {transactions?.map((item, index) => (
                 <tr onClick={() => handleShow(item.id)} key={index}>
                   <td>{index + 1}</td>
-                  <td>{item.name}</td>
+                  <td>{item?.user.name}</td>
                   <td>{item.address}</td>
                   <td>{item.postCode}</td>
-                  <td className="tablePrice">{Rupiah.convert(item.income)}</td>
+                  <td className="tablePrice">{Rupiah.convert(item?.income)}</td>
                   <td
                     className={
                       item.status === "Success"
