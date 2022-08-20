@@ -18,14 +18,12 @@ export default function AddToping() {
   console.log(previewName);
   // const [form,setFrom]
 
-
   // Create variabel for store data with useState here ...
   const [form, setform] = useState({
     image: "",
     title: "",
     price: "",
   }); //Store product data
-
 
   //handle chahnge data on from
 
@@ -66,9 +64,8 @@ export default function AddToping() {
       formData.set("price", form.price);
 
       // Insert category data
-      const response = await API.post('/topping', formData, config);
+      const response = await API.post("/topping", formData, config);
       console.log(response);
-
 
       navigate("/transaction");
     } catch (error) {
@@ -80,7 +77,7 @@ export default function AddToping() {
       <Navbar />
       <Container className="addProductContainer">
         <div className="addProductLeft">
-          <form onSubmit={(e) =>handleSubmit.mutate (e)}>
+          <form onSubmit={(e) => handleSubmit.mutate(e)}>
             <h1>Toping</h1>
             <input
               type="text"
@@ -108,7 +105,7 @@ export default function AddToping() {
               {previewName === "" ? "Photo Toping" : previewName}
               <img src={paperClip} alt="paperClip" />
             </label>
-            <button type="submit">Add Toping</button>
+            <button>Add Toping</button>
           </form>
         </div>
         {preview && (

@@ -2,14 +2,17 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 	dto "waysbucks/dto/result"
 	transactiondto "waysbucks/dto/transaction"
 	"waysbucks/models"
 	"waysbucks/repositories"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 )
 
@@ -89,6 +92,9 @@ func (h *handlerTransaction) CreateTransaction(w http.ResponseWriter, r *http.Re
 func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	idTrans := int(userInfo["time"].(float64))
+
 	request := new(transactiondto.UpdateTransaction)
 	if err := json.NewDecoder(r.Body).Decode(request); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -96,8 +102,9 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 		json.NewEncoder(w).Encode(response)
 	}
 
-	id, _ := strconv.Atoi(mux.Vars(r)["id"])
-	transaction, err := h.TransactionRepository.GetTransaction(id)
+	fmt.Println(request)
+
+	transaction, err := h.TransactionRepository.GetTransaction(idTrans)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
@@ -107,6 +114,19 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 	if request.UserID != 0 {
 		transaction.UserID = request.UserID
 	}
+
+	if request.Total != 0 {
+		transaction.Total = request.Total
+	}
+
+	if request.Status != "" {
+		transaction.Status = request.Status
+	}
+
+	claims := jwt.MapClaims{}
+	timeMilli := time.Now()
+	IdTranss := timeMilli.Unix()
+	claims["time"] = IdTranss
 
 	data, err := h.TransactionRepository.UpdateTransaction(transaction)
 	if err != nil {
