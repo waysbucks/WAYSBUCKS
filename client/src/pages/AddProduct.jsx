@@ -13,7 +13,7 @@ import paperClip from "../assets/paperClip.png";
 import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
-  const [product, setProduct] = useState({});
+  // const [product, setProduct] = useState({});
   const [previewName, setPreviewName] = useState(""); //name
   const [preview, setPreview] = useState(null); //image
 
@@ -48,7 +48,7 @@ export default function AddProduct() {
       // Configuration
       const config = {
         headers: {
-          "Content-type": "application/json",
+          "Content-type": "multipart/form-data",
         },
       };
 
@@ -57,15 +57,12 @@ export default function AddProduct() {
       formData.set("title", form.title);
       formData.set("price", form.price);
 
-
-      // Data body
-
       // Insert category data
-      const response = await API.post('/product', body, config);
+      const response = await API.post('/product', formData, config);
       console.log(response);
 
 
-      // navigate("/transaction");
+      navigate("/transaction");
     } catch (error) {
       console.log(error);
     }

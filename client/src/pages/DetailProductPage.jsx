@@ -80,47 +80,47 @@ console.log(toppings)
             <div className={productModules.right}>
               <span className={productModules.name}>
                 <p className={productModules.titleProduct}>
-                  {data.productName}
+                  {product?.title}
                 </p>
                 <p className={productModules.priceBrown}>
-                  {Rupiah.convert(data.price)}
+                  {Rupiah.convert(product?.price)}
                 </p>
                 <div className={productModules.toppings}>
                   {toppings?.map((item, index) => (
                     <div className={productModules.topping} key={index}>
                       <label
-                        htmlFor={item.id}
+                        htmlFor={item?.id}
                         className={productModules.checkContainer}
                       >
                         <input
                           type="checkbox"
-                          id={item.id}
+                          id={item?.id}
                           onChange={handleChange}
-                          value={item.price}
+                          value={item?.price}
                           name="toping"
                           className={productModules.testCheck}
                         />
-                        <span></span>
+                        
                         <img
                           src={checkToping}
                           alt="check"
                           className={productModules.checkmark}
                         />
                         <img
-                          src={item.image}
+                          src={item?.image}
                           alt="1"
                           onClick={handleCheck}
                           className={productModules.imageTopping}
                         />
                       </label>
-                      <p>{item.name}</p>
+                      <p>{item?.title.substring(0,17)}</p>
                     </div>
                   ))}
                 </div>
               </span>
               <div className={productModules.price}>
                 <p>Total</p>
-                <p>{Rupiah.convert(data.price + resultTotal)}</p>
+                <p>{Rupiah.convert(product?.price + resultTotal)}</p>
               </div>
               <div className={productModules.btn_grp}>
                 <button className={productModules.btn} onClick={handleSubmit}>

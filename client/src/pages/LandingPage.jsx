@@ -72,7 +72,7 @@ console.log(products)
                     }
                     onClick={state.isLogin === false ? handleClick : ""}
                   >
-                    <img className={cssModules.imageP}src={item.image} />
+                    <img className={cssModules.imageP}src={item.image} alt=""/>
                   </Link>
                   <div className={cssModules.card2}>
                     <p className={cssModules.text1}>
