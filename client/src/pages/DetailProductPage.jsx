@@ -10,7 +10,7 @@ import Navbar from "../components/navbar/navbar"; // component navbar
 import dummyLandingPage from "../DataDummy/dummyLandingPage"; // dummyData
 import dataTopping from "../DataDummy/dummyTopping";
 
-import {useQuery} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import { API } from "../config/api";
 
 export default function DetailProductPage() {
@@ -43,15 +43,13 @@ export default function DetailProductPage() {
 
   // submit
   const [counter, setCounter] = useState(0);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setCounter(counter + 1);
-  };
 
-  // tambah price
+  // price sum
   let resultTotal = topping.reduce((a, b) => {
     return a + parseInt(b);
   }, 0);
+
+
 
   //take id
 const{id} =useParams()
@@ -67,7 +65,31 @@ let { data: toppings } = useQuery('toppingsCache', async () => {
   return response.data.data;
 });
 console.log(toppings)
+const handleSubmit = useMutation(async (e) => {
+  try {
+    e.preventDefault();
 
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+    // const body = JSON.stringify({
+    //   topping_id: topping_id,
+    //   subtotal: subtotal,
+    //   product_id: parseInt(id),
+    //   qty: qty,
+    // });
+
+    console.log("a");
+
+    // await API.post("/cart", body, config);
+    setCounter(counter + 1);
+    // navigate("/");
+  } catch (error) {
+    console.log(error);
+  }
+});
   return (
     <>
       <Navbar counter={counter} />
@@ -123,7 +145,8 @@ console.log(toppings)
                 <p>{Rupiah.convert(product?.price + resultTotal)}</p>
               </div>
               <div className={productModules.btn_grp}>
-                <button className={productModules.btn} onClick={handleSubmit}>
+                <button className={productModules.btn}
+                onClick={(e)=>handleSubmit(e)}>
                   {" "}
                   Add Cart
                 </button>

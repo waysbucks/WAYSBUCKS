@@ -1,7 +1,7 @@
 // dependencies
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // component
 import Navbar from "../components/navbar/navbar";
@@ -20,7 +20,7 @@ export default function AddToping() {
 
 
   // Create variabel for store data with useState here ...
-  const [topping, setTopping] = useState({
+  const [form, setform] = useState({
     image: "",
     title: "",
     price: "",
@@ -31,8 +31,8 @@ export default function AddToping() {
 
   //handle chahnge data on from
   const handleChange = (e) => {
-    setTopping({
-      ...topping,
+    setform({
+      ...form,
       [e.target.name]:
         e.target.type === "file" ? e.target.files : e.target.value,
     });
@@ -45,36 +45,34 @@ export default function AddToping() {
       setPreviewName(e.target.files[0].name);
     }
   };
-  console.log(topping);
+  console.log(form);
 
-  // let navigate = useNavigate();
+  let navigate = useNavigate();
 
-  const handleSubmit =useMutation(async (e) => {
+  const handleSubmit = useMutation(async (e) => {
     try {
-      e.prevent.default();
+      e.preventDefault();
 
-      
       // Configuration
       const config = {
         headers: {
-          "Content-type": "application/json",
+          "Content-type": "multipart/form-data",
         },
       };
 
       const formData = new FormData();
-      formData.set("image", topping.image[0], topping.image[0].name);
-      formData.set("title", topping.title);
-      formData.set("price", topping.price);
-
+      formData.set("image", form.image[0], form.image[0].name);
+      formData.set("title", form.title);
+      formData.set("price", form.price);
 
       // Insert category data
       const response = await API.post('/topping', formData, config);
       console.log(response);
 
 
-      // navigate("/transaction");
+      navigate("/transaction");
     } catch (error) {
-    console.log(error)
+      console.log(error);
     }
   });
   return (
