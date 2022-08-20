@@ -68,13 +68,6 @@ func (h *handlersAuth) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	profile := models.Profile{
-		ID:     data.ID,
-		UserID: data.ID,
-	}
-
-	h.AuthRepository.CreateProfileRegister(profile)
-
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: "Success", Data: data}
 	json.NewEncoder(w).Encode(response)
@@ -114,7 +107,6 @@ func (h *handlersAuth) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	timeMilli := time.Now()
-	fmt.Println(timeMilli.Unix())
 
 	claims := jwt.MapClaims{}
 	IdTrans := timeMilli.Unix()

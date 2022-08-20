@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	cartdto "waysbucks/dto/cart"
@@ -68,6 +69,7 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 	}
+	fmt.Println(request.ProductID)
 
 	validate := validator.New()
 	err := validate.Struct(request)
@@ -78,13 +80,21 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// var toppingId []int
+	// for _, r := range r.FormValue("toppingId") {
+	// 	if int(r-'0') >= 0 {
+	// 		toppingId = append(toppingId, int(r-'0'))
+	// 	}
+	// }
+	// id, _ := strconv.Atoi(mux.Vars(r)["id"])
+
 	requestForm := models.Cart{
 		ProductID:     request.ProductID,
 		TransactionID: idTrans,
 		QTY:           request.QTY,
 		SubTotal:      request.SubTotal,
 		ToppingID:     request.ToppingID,
-		// Status:        request.Status,
+		Status:        request.Status,
 	}
 
 	validatee := validator.New()
@@ -104,7 +114,9 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		QTY:           request.QTY,
 		SubTotal:      request.SubTotal,
 		Topping:       topping,
+		Status:        "on",
 	}
+	fmt.Println(cart)
 
 	data, err := h.CartRepository.CreateCart(cart)
 	if err != nil {
@@ -180,13 +192,18 @@ func (h *handlersCart) DeleteCart(w http.ResponseWriter, r *http.Request) {
 func (h *handlersCart) FindCartsByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id := 1
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	idTrans := int(userInfo["time"].(float64))
 
-	cart, err := h.CartRepository.FindCartsTransaction(id)
+	cart, err := h.CartRepository.FindCartsTransaction(idTrans)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
+	}
+
+	for i, p := range cart {
+		cart[i].Product.Image = path_file_cart + p.Product.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -201,5 +218,6 @@ func convertResponseCart(u models.Cart) models.Cart {
 		SubTotal: u.SubTotal,
 		Product:  u.Product,
 		Topping:  u.Topping,
+		// Transaction: u.Transaction,
 	}
 }

@@ -1,23 +1,21 @@
 // dependencies
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Rupiah from "rupiah-format";
 import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
 
-import productModules from "../styles/product.module.css"; // style
-import checkToping from "../assets/checkToping.svg"; // file
-import Navbar from "../components/navbar/navbar"; // component navbar
+// style
+import productModules from "../styles/product.module.css";
 
-import dummyLandingPage from "../DataDummy/dummyLandingPage"; // dummyData
-import dataTopping from "../DataDummy/dummyTopping";
+// file
+import checkToping from "../assets/checkToping.svg";
 
-import {useMutation, useQuery} from "react-query";
+// component
+import Navbar from "../components/navbar/navbar";
 import { API } from "../config/api";
 
 export default function DetailProductPage() {
-  // filter
-  const params = useParams();
-  const data = dummyLandingPage[parseInt(params.id - 1)];
-
+  const navigate = useNavigate();
   // check
   const [show, setShow] = useState(false);
 
@@ -29,70 +27,81 @@ export default function DetailProductPage() {
     }
   };
 
-  // topping
-  const [topping, setTopping] = useState([]);
+  // toping
+  const [toping, setToping] = useState([]);
+  const [topping_id, setIdToping] = useState([]);
+
   const handleChange = (e) => {
-    let updateTopping = [...topping];
+    let updateToping = [...toping];
     if (e.target.checked) {
-      updateTopping = [...topping, e.target.value];
+      updateToping = [...toping, e.target.value];
     } else {
-      updateTopping.splice(topping.indexOf(e.target.value));
+      updateToping.splice(toping.indexOf(e.target.value));
     }
-    setTopping(updateTopping);
+    setToping(updateToping);
+
+    let toppingId = [...topping_id];
+    if (e.target.checked) {
+      toppingId = [...topping_id, parseInt(e.target.id)];
+    } else {
+      toppingId.splice(topping_id.indexOf(e.target.id));
+    }
+
+    setIdToping(toppingId);
   };
 
-  // submit
-  const [counter, setCounter] = useState(0);
+  // fatching
+  let { id } = useParams();
+  let { data: product } = useQuery("productCache", async () => {
+    const response = await API.get("/product/" + id);
+    return response.data.data;
+  });
+
+  let { data: toppings } = useQuery("toppingsCache", async () => {
+    const response = await API.get("/toppings");
+    return response.data.data;
+  });
 
   // price sum
-  let resultTotal = topping.reduce((a, b) => {
+  let resultTotal = toping.reduce((a, b) => {
     return a + parseInt(b);
   }, 0);
 
+  let subtotal = product?.price + resultTotal;
+  let qty = 1;
 
+  const handleSubmit = useMutation(async (e) => {
+    try {
+      e.preventDefault();
 
-  //take id
-const{id} =useParams()
-  // Fetching product data from database(product)
-let { data: product } = useQuery('productCache', async () => {
-  const response = await API.get('/product/'+ id);
-  return response.data.data;
-});
-console.log(product)
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const body = JSON.stringify({
+        topping_id: topping_id,
+        subtotal: subtotal,
+        product_id: parseInt(id),
+        qty: qty,
+      });
 
-let { data: toppings } = useQuery('toppingsCache', async () => {
-  const response = await API.get('/toppings');
-  return response.data.data;
-});
-console.log(toppings)
-const handleSubmit = useMutation(async (e) => {
-  try {
-    e.preventDefault();
+      console.log("a");
 
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
-    // const body = JSON.stringify({
-    //   topping_id: topping_id,
-    //   subtotal: subtotal,
-    //   product_id: parseInt(id),
-    //   qty: qty,
-    // });
+      const response = await API.post("/cart", body, config);
+      console.log("====================================");
+      console.log(response);
+      console.log("====================================");
 
-    console.log("a");
+      // navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
-    // await API.post("/cart", body, config);
-    setCounter(counter + 1);
-    // navigate("/");
-  } catch (error) {
-    console.log(error);
-  }
-});
   return (
     <>
-      <Navbar counter={counter} />
+      <Navbar />
       <div>
         <section>
           <div className={productModules.wrap}>
@@ -101,9 +110,7 @@ const handleSubmit = useMutation(async (e) => {
             </div>
             <div className={productModules.right}>
               <span className={productModules.name}>
-                <p className={productModules.titleProduct}>
-                  {product?.title}
-                </p>
+                <p className={productModules.titleProduct}>{product?.title}</p>
                 <p className={productModules.priceBrown}>
                   {Rupiah.convert(product?.price)}
                 </p>
@@ -122,7 +129,7 @@ const handleSubmit = useMutation(async (e) => {
                           name="toping"
                           className={productModules.testCheck}
                         />
-                        
+
                         <img
                           src={checkToping}
                           alt="check"
@@ -135,7 +142,7 @@ const handleSubmit = useMutation(async (e) => {
                           className={productModules.imageTopping}
                         />
                       </label>
-                      <p>{item?.title.substring(0,17)}</p>
+                      <p>{item?.title.substring(0, 17)}</p>
                     </div>
                   ))}
                 </div>
@@ -145,8 +152,10 @@ const handleSubmit = useMutation(async (e) => {
                 <p>{Rupiah.convert(product?.price + resultTotal)}</p>
               </div>
               <div className={productModules.btn_grp}>
-                <button className={productModules.btn}
-                onClick={(e)=>handleSubmit(e)}>
+                <button
+                  className={productModules.btn}
+                  onClick={(e) => handleSubmit.mutate(e)}
+                >
                   {" "}
                   Add Cart
                 </button>

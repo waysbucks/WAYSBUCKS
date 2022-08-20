@@ -17,26 +17,30 @@ type CartRepository interface {
 	FindCartsTransaction(TrxID int) ([]models.Cart, error)
 }
 
+// type repository struct {
+// 	db *gorm.DB
+// }
+
 func RepositoryCart(db *gorm.DB) *repository {
 	return &repository{db}
 }
 
 func (r *repository) FindCarts() ([]models.Cart, error) {
 	var carts []models.Cart
-	err := r.db.Preload("Product").Preload("Topping").Find(&carts).Error
+	err := r.db.Preload("Product").Preload("Topping").Preload("Transaction").Find(&carts).Error
 
 	return carts, err
 }
 
 func (r *repository) GetCart(ID int) (models.Cart, error) {
 	var cart models.Cart
-	err := r.db.First(&cart, ID).Error
+	err := r.db.Preload("Product").Preload("Topping").Preload("Transaction").First(&cart, ID).Error
 
 	return cart, err
 }
 
 func (r *repository) CreateCart(cart models.Cart) (models.Cart, error) {
-	err := r.db.Preload("Product").Preload("Topping").Create(&cart).Error
+	err := r.db.Preload("Product").Preload("Topping").Preload("Transaction").Create(&cart).Error
 
 	return cart, err
 }
@@ -61,7 +65,7 @@ func (r *repository) CreateTransactionID(transaction models.Transaction) (models
 
 func (r *repository) FindToppingsID(ToppingID []int) ([]models.Topping, error) {
 	var toppings []models.Topping
-	err := r.db.Find(&toppings, ToppingID).Error
+	err := r.db.Debug().Find(&toppings, ToppingID).Error
 
 	return toppings, err
 }

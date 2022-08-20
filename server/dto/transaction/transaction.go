@@ -5,7 +5,9 @@ type CreateTransaction struct {
 }
 
 type UpdateTransaction struct {
-	UserID int `json:"user_id" form:"user_id"`
+	UserID int    `json:"user_id" form:"user_id"`
+	Status string `json:"status"`
+	Total  int    `json:"total"`
 }
 
 // type TransactionResponse struct {

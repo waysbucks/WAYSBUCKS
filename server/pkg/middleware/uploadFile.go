@@ -14,7 +14,6 @@ func UploadFile(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		file, handler, err := r.FormFile("image")
-		fmt.Println(r.FormFile("image"))
 
 		if err != nil && r.Method == "PATCH" {
 			ctx := context.WithValue(r.Context(), "dataFile", "false")
