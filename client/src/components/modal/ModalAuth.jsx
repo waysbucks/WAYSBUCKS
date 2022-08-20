@@ -84,7 +84,6 @@ export default function ModalAuth({ show, setShow }) {
     name: "",
   });
 
-
   const handleChangeRegister = (e) => {
     setRegister({
       ...register,
@@ -106,7 +105,7 @@ export default function ModalAuth({ show, setShow }) {
     const body = JSON.stringify(register);
 
     // Insert data user to database
-    const response = await API.post("/register", body, config);
+    await API.post("/register", body, config);
 
     // Handling response here
     setShows(false);

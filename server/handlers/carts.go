@@ -78,20 +78,13 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// var toppingId []int
-	// for _, r := range r.FormValue("toppingId") {
-	// 	if int(r-'0') >= 0 {
-	// 		toppingId = append(toppingId, int(r-'0'))
-	// 	}
-	// }
-	id, _ := strconv.Atoi(mux.Vars(r)["id"])
-
 	requestForm := models.Cart{
-		ProductID:     id,
+		ProductID:     request.ProductID,
 		TransactionID: idTrans,
 		QTY:           request.QTY,
 		SubTotal:      request.SubTotal,
 		ToppingID:     request.ToppingID,
+		// Status:        request.Status,
 	}
 
 	validatee := validator.New()
@@ -106,7 +99,7 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 	topping, _ := h.CartRepository.FindToppingsID(request.ToppingID)
 
 	cart := models.Cart{
-		ProductID:     id,
+		ProductID:     request.ProductID,
 		TransactionID: idTrans,
 		QTY:           request.QTY,
 		SubTotal:      request.SubTotal,

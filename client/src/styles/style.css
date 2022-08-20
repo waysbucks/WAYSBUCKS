@@ -674,3 +674,6 @@ th,td{
     height: 300px !important;
 }
 /* landing */
+.fd{
+    display: none !important;
+}
