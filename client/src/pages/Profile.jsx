@@ -2,6 +2,8 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import QRCode from "react-qr-code";
+import { useQuery } from "react-query";
+import { API } from "../config/api";
 
 // file
 import PhotoProfile from "../assets/Rectangle 12.png";
@@ -10,21 +12,26 @@ import Logo from "../assets/Logo.svg";
 
 // component
 import Navbar from "../components/navbar/navbar";
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
+//
 
 export default function Profile() {
+  const [state]= useContext(UserContext)
+  console.log("check",state)
   return (
     <>
       <Navbar />
       <Container className="profileContainer">
         <div className="profileLeft">
-          <h1>My Profile</h1>
+          <h1>My Profil</h1>
           <div className="biodata">
             <img src={PhotoProfile} alt="Profile" />
             <ul>
-              <li className="biodataTitle">Full Name</li>
-              <li className="biodataContent">Test Profile</li>
+              <li className="biodataTitle">FULL NAME</li>
+              <li className="biodataContent">{state.user.name}</li>
               <li className="biodataTitle">Email</li>
-              <li className="biodataContent">testprofile@mail.com</li>
+              <li className="biodataContent">{state.user.email}</li>
             </ul>
           </div>
         </div>

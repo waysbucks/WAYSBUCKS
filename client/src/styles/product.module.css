@@ -4,7 +4,7 @@
 span{
   display: block;
 }
-.wrap{ 
+.wrap{
   /* border: 1px solid black; */
   display: flex;
   flex-direction: row;
@@ -28,7 +28,7 @@ span{
 .text_top{
   margin-top: 60px;
 }
-.topings{
+.toppings{
   margin-left:50px;
   /* border: 1px solid black; */
   display: grid;
@@ -37,7 +37,7 @@ span{
   height: 280px;
   overflow: scroll;
 }
-.toping{
+.topping{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -45,13 +45,13 @@ span{
   width: 141px;
   height: 137px;
   text-align: center;
-  
+
 }
-.topings::-webkit-scrollbar{
+.toppings::-webkit-scrollbar{
   display: none;
 }
 
-.toping>img{
+.topping>img{
   width: 80px;
   width: 80px;
   border-radius: 50%;
@@ -84,7 +84,7 @@ span{
   margin-left: 30px;
 }
 
-.imageToping{
+.imageTopping{
   width: 75px;
   height: 85px;
 }
@@ -151,7 +151,7 @@ span{
    font-weight: 700;
    color: #974A4A;
 }
-.toping>p{
+.topping>p{
   color: #BD0707;
   /* font-size: 15px; */
 }

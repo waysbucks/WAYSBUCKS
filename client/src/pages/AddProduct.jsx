@@ -57,10 +57,13 @@ export default function AddProduct() {
       formData.set("title", form.title);
       formData.set("price", form.price);
 
+
       // Data body
 
       // Insert category data
-      await API.post("/product", formData, config);
+      const response = await API.post('/product', body, config);
+      console.log(response);
+
 
       // navigate("/transaction");
     } catch (error) {
