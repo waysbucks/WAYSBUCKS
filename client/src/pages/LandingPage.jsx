@@ -4,34 +4,27 @@ import Rupiah from "rupiah-format";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-
-// style
-import cssModules from "../styles/home.module.css";
-
-// file
-import landing_2 from "../assets/land.2.png";
-
-//fakedata
-import dummyLandingPage from "../DataDummy/dummyLandingPage";
-//
-import {API} from "../config/api"
-
 import { useQuery } from 'react-query';
-// component
-import Navbar from "../components/navbar/navbar";
+//init DB
+import {API} from "../config/api" //DB
+//
+import cssModules from "../styles/home.module.css"; // style
+import landing_2 from "../assets/land.2.png"; // file
+import Navbar from "../components/navbar/navbar"; // component
+
 
 export default function LandingPage() {
-  // user data
-  const [state] = useContext(UserContext);
-  // modal login
-  const [show, setShow] = useState(false);
-  const handleClick = () => setShow(true);
-  //
+// modal login
+const [show, setShow] = useState(false);
+const handleClick = () => setShow(true);
+//
+const [state] = useContext(UserContext);   // user data
 // Fetching product data from database
 let { data: products } = useQuery('productsCache', async () => {
   const response = await API.get('/products');
   return response.data.data;
 });
+console.log(products)
   return (
     <>
       <Navbar setShow={setShow} show={show} />

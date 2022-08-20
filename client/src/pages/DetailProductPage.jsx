@@ -3,18 +3,15 @@ import { useParams } from "react-router-dom";
 import Rupiah from "rupiah-format";
 import { useState } from "react";
 
-// style
-import productModules from "../styles/product.module.css";
+import productModules from "../styles/product.module.css"; // style
+import checkToping from "../assets/checkToping.svg"; // file
+import Navbar from "../components/navbar/navbar"; // component navbar
 
-// file
-import checkToping from "../assets/checkToping.svg";
+import dummyLandingPage from "../DataDummy/dummyLandingPage"; // dummyData
+import dataTopping from "../DataDummy/dummyTopping";
 
-// dummyData
-import dummyLandingPage from "../DataDummy/dummyLandingPage";
-import dataToping from "../DataDummy/dummyTopping";
-
-// component
-import Navbar from "../components/navbar/navbar";
+import {useQuery} from "react-query";
+import { API } from "../config/api";
 
 export default function DetailProductPage() {
   // filter
@@ -32,16 +29,16 @@ export default function DetailProductPage() {
     }
   };
 
-  // toping
-  const [toping, setToping] = useState([]);
+  // topping
+  const [topping, setTopping] = useState([]);
   const handleChange = (e) => {
-    let updateToping = [...toping];
+    let updateTopping = [...topping];
     if (e.target.checked) {
-      updateToping = [...toping, e.target.value];
+      updateTopping = [...topping, e.target.value];
     } else {
-      updateToping.splice(toping.indexOf(e.target.value));
+      updateTopping.splice(topping.indexOf(e.target.value));
     }
-    setToping(updateToping);
+    setTopping(updateTopping);
   };
 
   // submit
@@ -52,9 +49,24 @@ export default function DetailProductPage() {
   };
 
   // tambah price
-  let resultTotal = toping.reduce((a, b) => {
+  let resultTotal = topping.reduce((a, b) => {
     return a + parseInt(b);
   }, 0);
+
+  //take id
+const{id} =useParams()
+  // Fetching product data from database(product)
+let { data: product } = useQuery('productCache', async () => {
+  const response = await API.get('/product/'+ id);
+  return response.data.data;
+});
+console.log(product)
+
+let { data: toppings } = useQuery('toppingsCache', async () => {
+  const response = await API.get('/toppings');
+  return response.data.data;
+});
+console.log(toppings)
 
   return (
     <>
@@ -63,7 +75,7 @@ export default function DetailProductPage() {
         <section>
           <div className={productModules.wrap}>
             <div className={productModules.left}>
-              <img src={data.productImage} alt="oke" />
+              <img src={product?.image} alt="oke" />
             </div>
             <div className={productModules.right}>
               <span className={productModules.name}>
@@ -73,9 +85,9 @@ export default function DetailProductPage() {
                 <p className={productModules.priceBrown}>
                   {Rupiah.convert(data.price)}
                 </p>
-                <div className={productModules.topings}>
-                  {dataToping?.map((item, index) => (
-                    <div className={productModules.toping} key={index}>
+                <div className={productModules.toppings}>
+                  {toppings?.map((item, index) => (
+                    <div className={productModules.topping} key={index}>
                       <label
                         htmlFor={item.id}
                         className={productModules.checkContainer}
@@ -98,7 +110,7 @@ export default function DetailProductPage() {
                           src={item.image}
                           alt="1"
                           onClick={handleCheck}
-                          className={productModules.imageToping}
+                          className={productModules.imageTopping}
                         />
                       </label>
                       <p>{item.name}</p>
