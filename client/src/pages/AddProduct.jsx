@@ -54,7 +54,7 @@ export default function AddProduct() {
       
       const formData = new FormData();
       console.log(formData);
-      // formData.set('image', form.image[0], form.image[0].name);
+      formData.set('image', form.image[0], form.image[0].name);
       formData.set('title', form.title);
       formData.set('price', form.price);
 
@@ -65,9 +65,10 @@ export default function AddProduct() {
       console.log(body);
       
       // Insert category data
-      await API.post('/product', body, config);
+      const response = await API.post('/product', body, config);
+      console.log(response);
 
-      navigate("/transaction");
+      // navigate("/transaction");
     } catch (error) {
       console.log(error);
     }
