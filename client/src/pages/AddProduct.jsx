@@ -58,16 +58,14 @@ export default function AddProduct() {
       formData.set("price", form.price);
 
       // Insert category data
-      const response = await API.post('/product', formData, config);
+      const response = await API.post("/product", formData, config);
       console.log(response);
-
 
       navigate("/transaction");
     } catch (error) {
       console.log(error);
     }
   });
-  console.log(form);
   return (
     <>
       <Navbar />

@@ -12,6 +12,7 @@ type TransactionRepository interface {
 	CreateTransaction(transaction models.Transaction) (models.Transaction, error)
 	UpdateTransaction(transaction models.Transaction) (models.Transaction, error)
 	DeleteTransaction(transaction models.Transaction) (models.Transaction, error)
+	GetUserTransaction(ID int) (models.User, error)
 }
 
 func RepositoryTransaction(db *gorm.DB) *repository {
@@ -19,7 +20,7 @@ func RepositoryTransaction(db *gorm.DB) *repository {
 }
 func (r *repository) FindTransactions() ([]models.Transaction, error) {
 	var transactions []models.Transaction
-	err := r.db.Preload("User").Preload("Carts").Find(&transactions).Error
+	err := r.db.Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&transactions).Error
 	return transactions, err
 }
 
@@ -45,4 +46,11 @@ func (r *repository) DeleteTransaction(transaction models.Transaction) (models.T
 	err := r.db.Delete(&transaction).Error
 
 	return transaction, err
+}
+
+func (r *repository) GetUserTransaction(ID int) (models.User, error) {
+	var user models.User
+	err := r.db.First(&user, ID).Error
+
+	return user, err
 }
