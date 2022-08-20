@@ -1,8 +1,8 @@
 // dependencies
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
-import { useMutation } from 'react-query';
-//api config 
+import { useMutation } from "react-query";
+//api config
 import { API } from "../config/api";
 
 // component
@@ -14,22 +14,22 @@ import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
   const [product, setProduct] = useState({});
-  const [previewName, setPreviewName] = useState("");//name
-  const [preview, setPreview] = useState(null);//image
+  const [previewName, setPreviewName] = useState(""); //name
+  const [preview, setPreview] = useState(null); //image
 
+  // Create variabel for store data with useState here ...
+  const [form, setForm] = useState({
+    image: "",
+    title: "",
+    price: "",
+  }); //Store product data
 
-    // Create variabel for store data with useState here ...
-    const [form, setForm] = useState({
-      image: '',
-      title: '',
-      price: '',
-    }); //Store product data
-  
   //handle chahnge data on from
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.type === "file" ? e.target.files : e.target.value,
     });
     // Create image url for preview
     if (e.target.type === "file") {
@@ -48,32 +48,29 @@ export default function AddProduct() {
       // Configuration
       const config = {
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
       };
-      
-      const formData = new FormData();
-      console.log(formData);
-      formData.set('image', form.image[0], form.image[0].name);
-      formData.set('title', form.title);
-      formData.set('price', form.price);
 
-      console.log("tos");
-      
+      const formData = new FormData();
+      formData.set("image", form.image[0], form.image[0].name);
+      formData.set("title", form.title);
+      formData.set("price", form.price);
+
+
       // Data body
-      const body = JSON.stringify(formData);
-      console.log(body);
-      
+
       // Insert category data
       const response = await API.post('/product', body, config);
       console.log(response);
+
 
       // navigate("/transaction");
     } catch (error) {
       console.log(error);
     }
   });
-console.log(form)
+  console.log(form);
   return (
     <>
       <Navbar />
