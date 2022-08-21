@@ -12,7 +12,7 @@ type TransactionRepository interface {
 	CreateTransaction(transaction models.Transaction) (models.Transaction, error)
 	UpdateTransaction(transaction models.Transaction) (models.Transaction, error)
 	DeleteTransaction(transaction models.Transaction) (models.Transaction, error)
-	GetUserTransaction(ID int) ([]models.User, error)
+	GetUserTransaction(ID int) ([]models.Transaction, error)
 	UpdateTransactions(status string, ID string) error
 	GetOneTransaction(ID string) (models.Transaction, error) // Declare GetOneTransaction repository method ...
 }
@@ -22,7 +22,7 @@ func RepositoryTransaction(db *gorm.DB) *repository {
 }
 func (r *repository) FindTransactions() ([]models.Transaction, error) {
 	var transactions []models.Transaction
-	err := r.db.Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&transactions).Error
+	err := r.db.Preload("User").Preload("User.Profile").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&transactions).Error
 	return transactions, err
 }
 
@@ -50,8 +50,8 @@ func (r *repository) DeleteTransaction(transaction models.Transaction) (models.T
 	return transaction, err
 }
 
-func (r *repository) GetUserTransaction(UserID int) ([]models.User, error) {
-	var user []models.User
+func (r *repository) GetUserTransaction(UserID int) ([]models.Transaction, error) {
+	var user []models.Transaction
 	err := r.db.Debug().Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&user, "user_id  = ?", UserID).Error
 
 	return user, err

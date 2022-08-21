@@ -5,16 +5,17 @@ import { UserContext } from "../../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 
 // files
-import Photo from "../../../assets/Ellipse 1.png";
+import PhotoProfile from "../../../assets/blank-profile.png";
 import Profile from "../../../assets/user 2.svg";
 import AddProduct from "../../../assets/AddProduct.svg";
 import AddToping from "../../../assets/topping 1.svg";
 import Logout from "../../../assets/logout 1.png";
+import { API } from "../../../config/api";
+import { useQuery } from "react-query";
 
 export default function Dropdown() {
   // logout
   const [state, dispatch] = useContext(UserContext);
-  const status = state.user.status;
   const navigate = useNavigate();
 
   const logout = () => {
@@ -24,9 +25,26 @@ export default function Dropdown() {
     navigate("/");
   };
 
+  let { data: profile } = useQuery("profileCache", async () => {
+    const response = await API.get("/user-profile");
+    return response.data.data;
+  });
+
+  console.log("aaa", profile);
+
   return (
     <NavDropdown
-      title={<img src={Photo} alt="photoProfile" className="navbarPhoto" />}
+      title={
+        <img
+          src={
+            profile?.profile?.image === "http://localhost:5000/uploads/"
+              ? PhotoProfile
+              : profile?.profile?.image
+          }
+          alt="photoProfile"
+          className="navbarPhoto"
+        />
+      }
       className="navImg"
     >
       <NavDropdown.Item

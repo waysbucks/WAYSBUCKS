@@ -9,10 +9,6 @@ import ModalTransaction from "../components/modal/ModalTransaction";
 import Navbar from "../components/navbar/navbar";
 import { API } from "../config/api";
 
-//
-// fakeData
-import dummyTransaction from "../DataDummy/dummyTransaction";
-
 export default function Transaction() {
   // modal
   const [showTrans, setShowTrans] = useState(false);
@@ -29,6 +25,8 @@ export default function Transaction() {
     const response = await API.get("/transactions");
     return response.data.data;
   });
+
+  console.log(transactions);
 
   return (
     <>

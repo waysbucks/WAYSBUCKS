@@ -30,20 +30,21 @@ export default function Profile() {
     }
   );
 
-  let { data: Profile } = useQuery("profileCache", async () => {
+  let { data: Profile, refetch } = useQuery("profileCache", async () => {
     const response = await API.get("/user-profile");
     return response.data.data.profile;
   });
 
-  console.log(Profile);
   return (
     <>
       <Navbar />
       <Container className="profileContainer">
         <div className="profileLeft">
           <h1>My Profile</h1>
+          <ModalProfile refetch={refetch} />
+
           <div className="biodata">
-            <img src={PhotoProfile} alt="Profile" />
+            <img src={Profile.image} alt="Profile" />
             <ul>
               <li className="biodataTitle">FULL NAME</li>
               <li className="biodataContent">{state.user.name}</li>
@@ -55,7 +56,6 @@ export default function Profile() {
               <li className="biodataContent">{Profile?.postal_code}</li>
             </ul>
           </div>
-          <ModalProfile />
         </div>
 
         <div className="profileRight">

@@ -170,7 +170,7 @@ hr{
 
 /* Auth */
 .modal-content{
-    background-color: #E5E5E5;
+    background-color: white;
     width: 420px !important;
     margin: 150px auto;
 }
@@ -236,9 +236,21 @@ hr{
 
 /* /navbar */
 
-
-
 /* profile */
+.previewPhoto{
+    display: flex;
+    width: 360px;
+    height: 50px;
+    border: 2px solid #BD0707;
+    background-color: #E0C8C840;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    justify-content: space-between;
+    color: black   ;
+    margin-bottom: 40px;
+}
+
 .profileContainer{
     display: flex;
     flex-direction: row;

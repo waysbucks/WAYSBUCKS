@@ -7,7 +7,7 @@ import { API } from "../../config/api";
 import { UserContext } from "../../context/UserContext";
 import paperClip from "../../assets/paperClip.png";
 
-export default function ModalProfile() {
+export default function ModalProfile({ refetch }) {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -46,16 +46,17 @@ export default function ModalProfile() {
       formData.set("address", form.address);
       formData.set("postal_code", form.postal_code);
 
-      const response = await API.patch("/profile", formData, config);
+      await API.patch("/profile", formData, config);
 
       setShow(false);
+      refetch();
     } catch (error) {
       console.log(error);
     }
   });
   return (
     <>
-      <button className="btnProfile login mt-4" onClick={handleShow}>
+      <button className="btnProfile login mb-2" onClick={handleShow}>
         Edit Profile
       </button>
       <Modal show={show} onHide={handleClose}>
@@ -87,7 +88,9 @@ export default function ModalProfile() {
             />
             <label
               htmlFor="addProductImage"
-              className={previewName === "" ? "addProfileImage" : "previewName"}
+              className={
+                previewName === "" ? "addProfileImage" : "previewPhoto"
+              }
             >
               {previewName === "" ? "Photo Product" : previewName}
               <img src={paperClip} alt="paperClip" />
