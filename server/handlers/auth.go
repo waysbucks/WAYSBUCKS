@@ -68,6 +68,13 @@ func (h *handlersAuth) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	profile := models.Profile{
+		ID:     data.ID,
+		UserID: data.ID,
+	}
+
+	h.AuthRepository.CreateNilProfile(profile)
+
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: "Success", Data: data}
 	json.NewEncoder(w).Encode(response)

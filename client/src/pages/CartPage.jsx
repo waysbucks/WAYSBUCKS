@@ -42,13 +42,13 @@ export default function CartPage() {
 
   let handleDelete = async (id) => {
     console.log(id);
-    await API.delete(`/cart/`);
+    await API.delete(`/cart/` + id);
     refetch();
   };
 
   // pay
   const form = {
-    status: "failed",
+    status: "success",
     total: 1111,
   };
   const handleSubmit = useMutation(async (e) => {
@@ -60,10 +60,7 @@ export default function CartPage() {
 
     const body = JSON.stringify(form);
 
-    const response = await API.patch("/transaction", body, config);
-    console.log("====================================");
-    console.log(response);
-    console.log("====================================");
+    await API.patch("/transaction", body, config);
   });
 
   return (

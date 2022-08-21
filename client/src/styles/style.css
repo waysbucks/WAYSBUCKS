@@ -242,6 +242,7 @@ hr{
 }
 
 .profileLeft h1{
+    margin-bottom: 20px;
     color: #BD0707;
     font-weight: 600;
 }
@@ -277,6 +278,18 @@ hr{
     font-size: 20px;
     margin-bottom: 25px;
 }
+
+.btnProfile{
+    width: 240px;
+    height: 40px;
+    margin-right: 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 3px solid #BD0707;
+    color: #fff;
+    background-color: #BD0707;
+}
+
 
 /* profileCard */
 
@@ -676,4 +689,8 @@ th,td{
 /* landing */
 .fd{
     display: none !important;
+}
+
+.inline {
+    display: flex ;
 }

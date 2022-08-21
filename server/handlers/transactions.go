@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,6 +14,8 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 )
+
+var path_file_transaction = "http://localhost:5000/uploads/"
 
 type handlerTransaction struct {
 	TransactionRepository repositories.TransactionRepository
@@ -102,8 +103,6 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 		json.NewEncoder(w).Encode(response)
 	}
 
-	fmt.Println(request)
-
 	transaction, err := h.TransactionRepository.GetTransaction(idTrans)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -159,5 +158,22 @@ func (h handlerTransaction) DeleteTransaction(w http.ResponseWriter, r *http.Req
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: "Success", Data: data}
+	json.NewEncoder(w).Encode(response)
+}
+
+func (h *handlerTransaction) GetUserTransaction(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content type", "application/json")
+
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	UserID := int(userInfo["id"].(float64))
+	transaction, err := h.TransactionRepository.GetUserTransaction(UserID)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	response := dto.SuccessResult{Code: "Success", Data: transaction}
 	json.NewEncoder(w).Encode(response)
 }

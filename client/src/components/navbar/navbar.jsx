@@ -10,10 +10,20 @@ import ModalAuth from "../modal/ModalAuth";
 // files
 import Logo from "../../assets/Logo.svg";
 import Cart from "../../assets/Vector.svg";
+import { useEffect } from "react";
+import { API } from "../../config/api";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
 export default function Navbar({ counter, setShow, show }) {
   const [state] = useContext(UserContext);
   const isLogin = state.isLogin;
+  const [fore, setFore] = useState([]);
+
+  let { data: cart } = useQuery("cartsCache", async () => {
+    const response = await API.get("/carts-id");
+    return response.data.data;
+  });
 
   return (
     <nav>
@@ -26,14 +36,14 @@ export default function Navbar({ counter, setShow, show }) {
         <div className="navbarRight">
           <div
             className={
-              counter === undefined
+              cart === undefined
                 ? "d-none"
-                : counter === 0
+                : cart?.length === 0
                 ? "d-none"
                 : "circle"
             }
           >
-            {counter}
+            {cart?.length}
           </div>
           <Link to={"/cart"}>
             <img

@@ -11,6 +11,7 @@ import (
 	"waysbucks/repositories"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 )
 
@@ -40,7 +41,8 @@ func (h *handlersUser) FindUsers(w http.ResponseWriter, r *http.Request) {
 func (h *handlersUser) GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	id := int(userInfo["id"].(float64))
 
 	user, err := h.UserRepository.GetUser(id)
 	if err != nil {
@@ -49,6 +51,7 @@ func (h *handlersUser) GetUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
+	user.Profile.Image = path_file + user.Profile.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: "Success", Data: user}

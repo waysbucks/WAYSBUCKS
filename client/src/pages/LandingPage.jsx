@@ -1,30 +1,28 @@
 // dependencies
 import { useContext, useState } from "react";
 import Rupiah from "rupiah-format";
-import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 //init DB
-import {API} from "../config/api" //DB
+import { API } from "../config/api"; //DB
 //
 import cssModules from "../styles/home.module.css"; // style
 import landing_2 from "../assets/land.2.png"; // file
 import Navbar from "../components/navbar/navbar"; // component
 
-
 export default function LandingPage() {
-// modal login
-const [show, setShow] = useState(false);
-const handleClick = () => setShow(true);
-//
-const [state] = useContext(UserContext);   // user data
-// Fetching product data from database
-let { data: products } = useQuery('productsCache', async () => {
-  const response = await API.get('/products');
-  return response.data.data;
-});
-console.log(products)
+  // modal login
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(true);
+  //
+  const [state] = useContext(UserContext); // user data
+  // Fetching product data from database
+  let { data: products } = useQuery("productsCache", async () => {
+    const response = await API.get("/products");
+    return response.data.data;
+  });
+  console.log(products);
   return (
     <>
       <Navbar setShow={setShow} show={show} />
@@ -72,7 +70,11 @@ console.log(products)
                     }
                     onClick={state.isLogin === false ? handleClick : ""}
                   >
-                    <img className={cssModules.imageP}src={item.image} alt=""/>
+                    <img
+                      className={cssModules.imageP}
+                      src={item.image}
+                      alt=""
+                    />
                   </Link>
                   <div className={cssModules.card2}>
                     <p className={cssModules.text1}>

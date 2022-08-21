@@ -10,6 +10,7 @@ import (
 	"waysbucks/repositories"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 )
 
@@ -47,6 +48,7 @@ func (h *handlersProfile) GetProfile(w http.ResponseWriter, r *http.Request) {
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 	}
+	profiles.Image = path_file + profiles.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: "Success", Data: convertResponseProfile(profiles)}
@@ -97,15 +99,19 @@ func (h *handlersProfile) CreateProfile(w http.ResponseWriter, r *http.Request) 
 func (h *handlersProfile) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	request := new(profiledto.UpdateProfile)
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-		json.NewEncoder(w).Encode(response)
-		return
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	id := int(userInfo["id"].(float64))
+
+	dataContex := r.Context().Value("dataFile")
+	filename := dataContex.(string)
+
+	postalcode, _ := strconv.Atoi(r.FormValue("postal_code"))
+	request := profiledto.UpdateProfile{
+		Address:    r.FormValue("address"),
+		PostalCode: postalcode,
+		Image:      filename,
 	}
 
-	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 	profile, err := h.ProfileRepository.GetProfile(int(id))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -113,20 +119,16 @@ func (h *handlersProfile) UpdateProfile(w http.ResponseWriter, r *http.Request) 
 		json.NewEncoder(w).Encode(response)
 	}
 
-	if request.Phone != "" {
-		profile.Phone = request.Phone
-	}
-	if request.Address != "" {
+	if (request.Address) != "" {
 		profile.Address = request.Address
 	}
-	if request.City != "" {
-		profile.City = request.City
-	}
+
 	if request.PostalCode != 0 {
 		profile.PostalCode = request.PostalCode
 	}
-	if request.Image != "" {
-		profile.Image = request.Image
+
+	if filename != "false" {
+		profile.Image = filename
 	}
 
 	data, err := h.ProfileRepository.UpdateProfile(profile)
