@@ -20,6 +20,20 @@ body{
 .tagProfile{
     padding-left: 35px;
 }
+.addProfileImage{
+    display: flex;
+    width: 360px;
+    height: 50px;
+    border: 2px solid #BD0707;
+    background-color: #E0C8C840;
+    padding: 10px;
+    margin-bottom: 0px;
+    border-radius: 5px;
+    justify-content: space-between;
+    color: #d29595   ;
+    margin-bottom: 40px;
+
+}
 
 nav{
     display: flex;

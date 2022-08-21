@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 import { useMutation } from "react-query";
 import { API } from "../../config/api";
 import { UserContext } from "../../context/UserContext";
+import paperClip from "../../assets/paperClip.png";
 
 export default function ModalProfile() {
   const [show, setShow] = useState(false);
@@ -17,12 +18,17 @@ export default function ModalProfile() {
     image: "",
   });
 
+  const [previewName, setPreviewName] = useState(""); //name
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]:
         e.target.type === "file" ? e.target.files : e.target.value,
     });
+    // Create image url for preview
+    if (e.target.type === "file") {
+      setPreviewName(e.target.files[0].name);
+    }
   };
 
   const handleSubmit = useMutation(async (e) => {
@@ -72,7 +78,20 @@ export default function ModalProfile() {
               id="postalcode"
               onChange={handleChange}
             />
-            <input type="file" name="image" onChange={handleChange} />
+            <input
+              type="file"
+              name="image"
+              id="addProductImage"
+              hidden
+              onChange={handleChange}
+            />
+            <label
+              htmlFor="addProductImage"
+              className={previewName === "" ? "addProfileImage" : "previewName"}
+            >
+              {previewName === "" ? "Photo Product" : previewName}
+              <img src={paperClip} alt="paperClip" />
+            </label>
 
             <button className="btnAuth mb-4">Submit</button>
           </div>

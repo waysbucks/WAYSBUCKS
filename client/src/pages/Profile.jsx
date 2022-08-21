@@ -48,9 +48,9 @@ export default function Profile() {
               <li className="biodataTitle">Email</li>
               <li className="biodataContent">{state.user.email}</li>
               <li className="biodataTitle">Address</li>
-              <li className="biodataContent">{Profile.address}</li>
+              <li className="biodataContent">{Profile?.address}</li>
               <li className="biodataTitle">Postal Code</li>
-              <li className="biodataContent">{Profile.postal_code}</li>
+              <li className="biodataContent">{Profile?.postal_code}</li>
             </ul>
           </div>
           <ModalProfile />
