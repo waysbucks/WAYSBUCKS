@@ -66,8 +66,6 @@ func (r *repository) UpdateTransactions(status string, ID string) error {
 	if status != transaction.Status && status == "success" {
 		var product models.Product
 		r.db.First(&product, transaction.ID)
-		// product.Qty = product.Qty - 1
-		r.db.Save(&product)
 	}
 
 	transaction.Status = status
