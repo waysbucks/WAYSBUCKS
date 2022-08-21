@@ -48,7 +48,7 @@ export default function CartPage() {
   // pay
   const form = {
     status: "pending",
-    total: 1111,
+    total: resultTotal,
   };
   const handleSubmit = useMutation(async (e) => {
     const config = {

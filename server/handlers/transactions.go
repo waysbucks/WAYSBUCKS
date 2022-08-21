@@ -233,6 +233,7 @@ func (h *handlerTransaction) Notification(w http.ResponseWriter, r *http.Request
 	fraudStatus := notificationPayload["fraud_status"].(string)
 	orderId := notificationPayload["order_id"].(string)
 	transaction, _ := h.TransactionRepository.GetOneTransaction(orderId)
+	fmt.Println(transaction)
 
 	if transactionStatus == "capture" {
 		if fraudStatus == "challenge" {
@@ -271,7 +272,7 @@ func SendMail(status string, transaction models.Transaction) {
 	if status != transaction.Status && (status == "success") {
 		var CONFIG_SMTP_HOST = "smtp.gmail.com"
 		var CONFIG_SMTP_PORT = 587
-		var CONFIG_SENDER_NAME = "DumbMerch <waysbucks@gmail.com>"
+		var CONFIG_SENDER_NAME = "WaysBucks <waysbucks@gmail.com>"
 		var CONFIG_AUTH_EMAIL = os.Getenv("EMAIL_SYSTEM")
 		var CONFIG_AUTH_PASSWORD = os.Getenv("PASSWORD_SYSTEM")
 
