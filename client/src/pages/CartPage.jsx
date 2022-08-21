@@ -47,7 +47,7 @@ export default function CartPage() {
 
   // pay
   const form = {
-    status: "success",
+    status: "pending",
     total: 1111,
   };
   const handleSubmit = useMutation(async (e) => {
@@ -60,9 +60,9 @@ export default function CartPage() {
     const body = JSON.stringify(form);
 
     const response = await API.patch("/transaction", body, config);
-    console.log(response);
+    console.log(response.data.data.token);
 
-    const token = response.data.token;
+    const token = response.data.data.token;
 
     window.snap.pay(token, {
       onSuccess: function (result) {
