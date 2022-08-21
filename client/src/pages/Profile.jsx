@@ -15,6 +15,8 @@ import ModalProfile from "../components/modal/ModalProfile";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
 import Rupiah from "rupiah-format";
+import { API } from "../config/api";
+import { useQuery } from "react-query";
 //
 
 export default function Profile() {

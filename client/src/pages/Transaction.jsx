@@ -10,8 +10,6 @@ import Navbar from "../components/navbar/navbar";
 import { API } from "../config/api";
 
 //
-import { API } from "../config/api";
-import { useQuery } from "react-query";
 // fakeData
 import dummyTransaction from "../DataDummy/dummyTransaction";
 
@@ -27,10 +25,10 @@ export default function Transaction() {
   const handleClose = () => setShowTrans(false);
 
   // Fetching product data from database
-let { data: transactions } = useQuery('transactionsCache', async () => {
-  const response = await API.get('/transactions');
-  return response.data.data;
-});
+  let { data: transactions } = useQuery("transactionsCache", async () => {
+    const response = await API.get("/transactions");
+    return response.data.data;
+  });
 
   return (
     <>
@@ -51,7 +49,6 @@ let { data: transactions } = useQuery('transactionsCache', async () => {
             </thead>
             <tbody>
               {transactions?.map((item, index) => (
-
                 <tr
                   onClick={() => handleShow(item?.id)}
                   key={index}
