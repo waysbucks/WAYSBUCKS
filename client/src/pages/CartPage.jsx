@@ -80,6 +80,8 @@ export default function CartPage() {
         alert("you closed the popup without finishing the payment");
       },
     });
+
+    await API.patch("/cart", body, config);
   });
   //
 
