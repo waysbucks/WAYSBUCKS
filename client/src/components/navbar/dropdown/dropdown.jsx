@@ -16,7 +16,6 @@ import { useQuery } from "react-query";
 export default function Dropdown() {
   // logout
   const [state, dispatch] = useContext(UserContext);
-  const status = state.user.status;
   const navigate = useNavigate();
 
   const logout = () => {
@@ -28,7 +27,7 @@ export default function Dropdown() {
 
   let { data: profile } = useQuery("profileCache", async () => {
     const response = await API.get("/user-profile");
-    return response.data.data.profile;
+    return response.data.data;
   });
 
   console.log("aaa", profile);
@@ -37,7 +36,11 @@ export default function Dropdown() {
     <NavDropdown
       title={
         <img
-          src={profile?.image === "" ? PhotoProfile : profile.image}
+          src={
+            profile?.profile?.image === "http://localhost:5000/uploads/"
+              ? PhotoProfile
+              : profile?.profile?.image
+          }
           alt="photoProfile"
           className="navbarPhoto"
         />
