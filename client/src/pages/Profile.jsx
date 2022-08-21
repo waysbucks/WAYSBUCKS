@@ -7,24 +7,39 @@ import QRCode from "react-qr-code";
 
 // file
 import PhotoProfile from "../assets/Rectangle 12.png";
-import Coffee from "../assets/coffee.jpg";
 import Logo from "../assets/Logo.svg";
 
 // component
 import Navbar from "../components/navbar/navbar";
+import ModalProfile from "../components/modal/ModalProfile";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
+import Rupiah from "rupiah-format";
 //
 
 export default function Profile() {
-  const [state]= useContext(UserContext)
-  console.log("check",state)
+  const [state] = useContext(UserContext);
+
+  let { data: ProfileTransactions } = useQuery(
+    "transactionsCache",
+    async () => {
+      const response = await API.get("/user-transaction");
+      return response.data.data;
+    }
+  );
+
+  let { data: Profile } = useQuery("profileCache", async () => {
+    const response = await API.get("/user-profile");
+    return response.data.data.profile;
+  });
+
+  console.log(Profile);
   return (
     <>
       <Navbar />
       <Container className="profileContainer">
         <div className="profileLeft">
-          <h1>My Profil</h1>
+          <h1>My Profile</h1>
           <div className="biodata">
             <img src={PhotoProfile} alt="Profile" />
             <ul>
@@ -32,50 +47,74 @@ export default function Profile() {
               <li className="biodataContent">{state.user.name}</li>
               <li className="biodataTitle">Email</li>
               <li className="biodataContent">{state.user.email}</li>
+              <li className="biodataTitle">Address</li>
+              <li className="biodataContent">{Profile?.address}</li>
+              <li className="biodataTitle">Postal Code</li>
+              <li className="biodataContent">{Profile?.postal_code}</li>
             </ul>
           </div>
+          <ModalProfile />
         </div>
+
         <div className="profileRight">
           <h1>My Transaction</h1>
-          <div className="profileCard">
-            <div className="contentCardLeft">
-              <div className="mapContent">
-                <img src={Coffee} alt="coffee" />
-                <ul>
-                  <li className="profileCardTitle">Capuchino</li>
-                  <li className="profileCardDate">
-                    <strong>Saturday</strong>,20 Oktober 2022
-                  </li>
-                  <li className="profileCardToping">
-                    <strong>Toping</strong> : Bobba
-                  </li>
-                  <li className="profileCardPrice">Price: Rp.20.000</li>
-                </ul>
+          {ProfileTransactions?.map((item, index) => (
+            <div
+              className={item?.status === "" ? "fd" : "profileCard mb-5"}
+              key={index}
+            >
+              <div className="contentCardLeft">
+                {item?.carts?.map((cart, idx) => (
+                  <div className="mapContent" key={idx}>
+                    <img
+                      src={
+                        "http://localhost:5000/uploads/" + cart?.product?.image
+                      }
+                      alt="coffee"
+                    />
+                    <ul>
+                      <li className="profileCardTitle">
+                        {cart?.product?.title}
+                      </li>
+                      <li className="profileCardDate">
+                        <strong>Saturday</strong>,20 Oktober 2022
+                      </li>
+                      <li className="profileCardToping">
+                        <strong className="inline">
+                          Toping :{" "}
+                          {cart.topping.map((topping, idx) => (
+                            <span key={idx}>{topping?.title},</span>
+                          ))}
+                        </strong>
+                      </li>
+                      <li className="profileCardPrice">
+                        Price: {Rupiah.convert(cart?.product?.price)}
+                      </li>
+                    </ul>
+                  </div>
+                ))}
               </div>
-              <div className="mapContent">
-                <img src={Coffee} alt="coffee" />
-                <ul>
-                  <li className="profileCardTitle">Ice Coffe Palm Sugar</li>
-                  <li className="profileCardDate">
-                    <strong>Saturday</strong>,20 Oktober 2022
-                  </li>
-                  <li className="profileCardToping">
-                    <strong>Toping</strong> : Bobba,Jelly,Coklat
-                  </li>
-                  <li className="profileCardPrice">Price: Rp.20.000</li>
-                </ul>
-              </div>
-            </div>
-            <div className="contentCardRight">
-              <img src={Logo} alt="logo" />
+              <div
+                className={
+                  item?.status === "Success"
+                    ? "contentCardRight Success"
+                    : item?.status === "Cancel"
+                    ? "contentCardRight Cancel"
+                    : "contentCardRight Otw"
+                }
+              >
+                <img src={Logo} alt="logo" />
 
-              <QRCode value="git re" bgColor="transparent" size={80} />
-              <span>
-                <p>On The Way</p>
-              </span>
-              <p className="profileSubTotal">Sub Total : Rp.69.000</p>
+                <QRCode value="git re" bgColor="transparent" size={80} />
+                <span>
+                  <p>{item?.status}</p>
+                </span>
+                <p className="profileSubTotal">
+                  Sub Total : {Rupiah.convert(item?.total)}
+                </p>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </Container>
     </>

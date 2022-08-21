@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -112,8 +111,6 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 	}
-	fmt.Println(request)
-	//
 
 	transaction, err := h.TransactionRepository.GetTransaction(idTrans)
 	if err != nil {
@@ -201,6 +198,23 @@ func (h handlerTransaction) DeleteTransaction(w http.ResponseWriter, r *http.Req
 }
 
 
+func (h *handlerTransaction) GetUserTransaction(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content type", "application/json")
+
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	UserID := int(userInfo["id"].(float64))
+	transaction, err := h.TransactionRepository.GetUserTransaction(UserID)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	response := dto.SuccessResult{Code: "Success", Data: transaction}
+	json.NewEncoder(w).Encode(response)
+}
+
 //
 func (h *handlerTransaction) Notification(w http.ResponseWriter, r *http.Request) {
 	var notificationPayload map[string]interface{}
@@ -243,3 +257,4 @@ func (h *handlerTransaction) Notification(w http.ResponseWriter, r *http.Request
   
 	w.WriteHeader(http.StatusOK)
   }
+

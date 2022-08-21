@@ -2,34 +2,48 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import QRCode from "react-qr-code";
+import { useQuery } from "react-query";
 import Rupiah from "rupiah-format";
 
 // logo
 import Logo from "../../assets/Logo.svg";
+import { API } from "../../config/api";
 
 // fakedata
 import dummyTransaction from "../../DataDummy/dummyTransaction";
 
 export default function ModalTransaction({ showTrans, close, id }) {
-  let productt = dummyTransaction[id - 1];
+  let { data: transaction } = useQuery("productsCache", async () => {
+    const response = await API.get("/transaction/" + id);
+    console.log(response);
+    return response?.data?.data;
+  });
 
   return (
     <Modal show={showTrans} onHide={close} className="modal-transaction">
       <div className="profileCard">
         <div className="contentCardLeft">
-          {productt?.product?.map((item, index) => (
+          {transaction?.carts?.map((item, index) => (
             <div className="mapContent" key={index}>
-              <img src={item.productImg} alt="coffee" />
+              <img
+                src={"http://localhost:5000/uploads/" + item.product.image}
+                alt="coffee"
+              />
               <ul>
-                <li className="profileCardTitle">{item.productName}</li>
+                <li className="profileCardTitle">{item.title}</li>
                 <li className="profileCardDate">
                   <strong>Saturday</strong>,20 Oktober 2022
                 </li>
                 <li className="profileCardToping">
-                  <strong>Toping :</strong>
+                  <strong className="inline">
+                    Toping :{" "}
+                    {item.topping.map((topping, idx) => (
+                      <span key={idx}>{topping.title},</span>
+                    ))}
+                  </strong>
                 </li>
                 <li className="profileCardPrice">
-                  Price: {Rupiah.convert(item.price)}
+                  Price: {Rupiah.convert(item?.subtotal)}
                 </li>
               </ul>
             </div>
@@ -37,9 +51,9 @@ export default function ModalTransaction({ showTrans, close, id }) {
         </div>
         <div
           className={
-            productt?.status === "Success"
+            transaction?.status === "Success"
               ? "contentCardRight Success"
-              : productt?.status === "Cancel"
+              : transaction?.status === "Cancel"
               ? "contentCardRight Cancel"
               : "contentCardRight Otw"
           }
@@ -47,7 +61,7 @@ export default function ModalTransaction({ showTrans, close, id }) {
           <img src={Logo} alt="logo" />
           <QRCode value="test" bgColor="transparent" size={80} />
           <span>
-            <p>{productt?.status}</p>
+            <p>{transaction?.status}</p>
           </span>
           <p className="profileSubTotal">Sub Total : Rp.69.000</p>
         </div>

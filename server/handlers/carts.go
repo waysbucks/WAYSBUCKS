@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	cartdto "waysbucks/dto/cart"
@@ -33,6 +32,10 @@ func (h *handlersCart) FindCarts(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
+	}
+
+	for i, p := range carts {
+		carts[i].Product.Image = path_file_cart + p.Product.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -69,7 +72,6 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 	}
-	fmt.Println(request.ProductID)
 
 	validate := validator.New()
 	err := validate.Struct(request)
@@ -116,7 +118,6 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		Topping:       topping,
 		Status:        "on",
 	}
-	fmt.Println(cart)
 
 	data, err := h.CartRepository.CreateCart(cart)
 	if err != nil {

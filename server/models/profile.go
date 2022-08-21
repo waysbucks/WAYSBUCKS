@@ -22,6 +22,7 @@ type ProfileResponse struct {
 	Address    string `json:"address"`
 	City       string `json:"city" `
 	PostalCode int    `json:"postal_code"`
+	Image      string `json:"image" gorm:"type: varchar(255)"`
 	UserID     int    `json:"user_id"`
 }
 

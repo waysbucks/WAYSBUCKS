@@ -1,11 +1,13 @@
 // dependencies
 import React, { useState } from "react";
 import { Container, Table } from "react-bootstrap";
+import { useQuery } from "react-query";
 import Rupiah from "rupiah-format";
 
 // component
 import ModalTransaction from "../components/modal/ModalTransaction";
 import Navbar from "../components/navbar/navbar";
+import { API } from "../config/api";
 
 //
 import { API } from "../config/api";
@@ -28,10 +30,8 @@ export default function Transaction() {
 let { data: transactions } = useQuery('transactionsCache', async () => {
   const response = await API.get('/transactions');
   return response.data.data;
-
-  
 });
-console.log(transactions);
+
   return (
     <>
       <Navbar />
@@ -51,24 +51,29 @@ console.log(transactions);
             </thead>
             <tbody>
               {transactions?.map((item, index) => (
-                <tr onClick={() => handleShow(item.id)} key={index}>
+
+                <tr
+                  onClick={() => handleShow(item?.id)}
+                  key={index}
+                  className={item.status === "" ? "fd" : ""}
+                >
                   <td>{index + 1}</td>
                   <td>{item?.user.name}</td>
-                  <td>{item.address}</td>
-                  <td>{item.postCode}</td>
-                  <td className="tablePrice">{Rupiah.convert(item?.income)}</td>
+                  <td>{item?.user.profile?.address}</td>
+                  <td>{item?.user.profile?.postal_code}</td>
+                  <td className="tablePrice">{Rupiah.convert(item?.total)}</td>
                   <td
                     className={
-                      item.status === "Success"
+                      item?.status === "Success"
                         ? "tableSuccess"
-                        : item.status === "Cancel"
+                        : item?.status === "Cancel"
                         ? "tableCancel"
-                        : item.status === "Waiting Approve"
+                        : item?.status === "Waiting Approve"
                         ? "tableWaiting"
                         : "tableOtw"
                     }
                   >
-                    {item.status}
+                    {item?.status}
                   </td>
                 </tr>
               ))}

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"waysbucks/handlers"
+	"waysbucks/pkg/middleware"
 	"waysbucks/pkg/mysql"
 	"waysbucks/repositories"
 
@@ -15,6 +16,6 @@ func ProfileRoutes(r *mux.Router) {
 	r.HandleFunc("/profiles", h.FindProfiles).Methods("GET")
 	r.HandleFunc("/profile/{id}", h.GetProfile).Methods("GET")
 	r.HandleFunc("/profile", h.CreateProfile).Methods("POST")
-	r.HandleFunc("/profile/{id}", h.UpdateProfile).Methods("PATCH")
+	r.HandleFunc("/profile", middleware.Auth(middleware.UploadFile(h.UpdateProfile))).Methods("PATCH")
 	r.HandleFunc("/profile/{id}", h.DeleteProfile).Methods("DELETE")
 }
