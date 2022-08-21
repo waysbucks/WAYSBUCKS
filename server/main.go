@@ -9,9 +9,17 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
+
 )
 
 func main() {
+		// env
+		errEnv := godotenv.Load()
+		if errEnv != nil {
+			panic("Failed to load env file")
+		}
+
 	mysql.DatabaseInit()
 
 	database.RunMigration()
@@ -29,3 +37,5 @@ func main() {
 	fmt.Println("Server Running on localhost:5000")
 	http.ListenAndServe("localhost:5000", handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
 }
+
+

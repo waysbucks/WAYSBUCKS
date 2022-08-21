@@ -1,13 +1,10 @@
 // dependencies
 import React, { useState } from "react";
 import Rupiah from "rupiah-format";
+import { useEffect } from "react";
 
 // style
 import cartModules from "../styles/cart.module.css";
-
-// fakedata
-import productCart from "../DataDummy/dummyCart";
-import dummyTransaction from "../DataDummy/dummyTransaction";
 
 // file
 import trash from "../assets/trash.svg";
@@ -19,13 +16,15 @@ import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
   const [state, dispatch] = useContext(UserContext);
   // modal
   const [showTrans, setShowTrans] = useState(false);
-  const handleShow = () => setShowTrans(true);
+  // const handleShow = () => setShowTrans(true);
   const handleClose = () => setShowTrans(false);
+  let navigate = useNavigate()
 
   // cart
   let { data: cart, refetch } = useQuery("cartsCache", async () => {
@@ -56,12 +55,57 @@ export default function CartPage() {
       headers: {
         "Content-type": "application/json",
       },
-    };
-
+    }; 
+     // Insert transaction data
+    const responses = await API.post("/transaction", config);
+    
+    const token = responses.data.token;
+    
+    window.snap.pay(token, {
+      onSuccess: function (result) {
+        /* You may add your own implementation here */
+        console.log(result);
+        navigate("/profile");
+      },
+      onPending: function (result) {
+        /* You may add your own implementation here */
+        console.log(result);
+        navigate("/profile");
+      },
+      onError: function (result) {
+        /* You may add your own implementation here */
+        console.log(result);
+      },
+      onClose: function () {
+        /* You may add your own implementation here */
+        alert("you closed the popup without finishing the payment");
+      },
+    });
+    
     const body = JSON.stringify(form);
-
-    await API.patch("/transaction", body, config);
+    
+    const response = await API.patch("/transaction", body, config);
+    console.log(response);
   });
+  //
+  
+  useEffect(() => {
+    //change this to the script source you want to load, for example this is snap.js sandbox env
+    const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+    //change this according to your client-key
+    const myMidtransClientKey = "Client key here ...";
+
+    let scriptTag = document.createElement("script");
+    scriptTag.src = midtransScriptUrl;
+    // optional if you want to set script attribute
+    // for example snap.js have data-client-key attribute
+    scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+
+    document.body.appendChild(scriptTag);
+    return () => {
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
 
   return (
     <>

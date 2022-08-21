@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/navbar";
 
 import { API } from "../config/api";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 // file
 import paperClip from "../assets/paperClip.png";
 

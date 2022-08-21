@@ -2,8 +2,8 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import QRCode from "react-qr-code";
-import { useQuery } from "react-query";
-import { API } from "../config/api";
+// import { useQuery } from "react-query";
+// import { API } from "../config/api";
 
 // file
 import PhotoProfile from "../assets/Rectangle 12.png";

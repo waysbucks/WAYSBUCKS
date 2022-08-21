@@ -86,8 +86,8 @@ export default function DetailProductPage() {
         qty: qty,
       });
 
-      await API.post("/cart", body, config);
-
+      const response = await API.post("/cart", body, config);
+      
       navigate("/");
     } catch (error) {
       console.log(error);
