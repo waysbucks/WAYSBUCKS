@@ -17,12 +17,13 @@ export default function LandingPage() {
   const handleClick = () => setShow(true);
   //
   const [state] = useContext(UserContext); // user data
+
   // Fetching product data from database
   let { data: products } = useQuery("productsCache", async () => {
     const response = await API.get("/products");
     return response.data.data;
   });
-  console.log(products);
+
   return (
     <>
       <Navbar setShow={setShow} show={show} />
@@ -73,7 +74,7 @@ export default function LandingPage() {
                     <img
                       className={cssModules.imageP}
                       src={item.image}
-                      alt=""
+                      alt="test"
                     />
                   </Link>
                   <div className={cssModules.card2}>

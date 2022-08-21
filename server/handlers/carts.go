@@ -204,7 +204,7 @@ func (h *handlersCart) FindCartsByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for i, p := range cart {
-		cart[i].Product.Image = path_file_cart + p.Product.Image
+		cart[i].Product.Image = path_file_cart + p.Product.Image //image name
 	}
 
 	w.WriteHeader(http.StatusOK)

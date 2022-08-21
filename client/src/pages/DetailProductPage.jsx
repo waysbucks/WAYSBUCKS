@@ -28,9 +28,10 @@ export default function DetailProductPage() {
   };
 
   // toping
-  const [toping, setToping] = useState([]);
-  const [topping_id, setIdToping] = useState([]);
+  const [toping, setToping] = useState([]); //price
+  const [topping_id, setIdToping] = useState([]); //id
 
+  // check mark
   const handleChange = (e) => {
     let updateToping = [...toping];
     if (e.target.checked) {
@@ -86,8 +87,8 @@ export default function DetailProductPage() {
         qty: qty,
       });
 
-      const response = await API.post("/cart", body, config);
-      
+      await API.post("/cart", body, config);
+
       navigate("/");
     } catch (error) {
       console.log(error);

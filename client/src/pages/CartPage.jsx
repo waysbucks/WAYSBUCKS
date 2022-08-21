@@ -14,12 +14,9 @@ import ModalCart from "../components/modal/modalCart";
 import Navbar from "../components/navbar/navbar";
 import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
-  const [state, dispatch] = useContext(UserContext);
   // modal
   const [showTrans, setShowTrans] = useState(false);
   // const handleShow = () => setShowTrans(true);
@@ -60,7 +57,6 @@ export default function CartPage() {
     const body = JSON.stringify(form);
 
     const response = await API.patch("/transaction", body, config);
-    console.log(response.data.data.token);
 
     const token = response.data.data.token;
 

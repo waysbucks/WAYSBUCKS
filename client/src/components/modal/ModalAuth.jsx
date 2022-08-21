@@ -37,7 +37,7 @@ export default function ModalAuth({ show, setShow }) {
   // auth
   // const navigate = useNavigate();
 
-  // _________kogin
+  // _________login
   const [state, dispatch] = useContext(UserContext);
   const [form, setForm] = useState({
     email: "",
@@ -65,6 +65,7 @@ export default function ModalAuth({ show, setShow }) {
       const body = JSON.stringify(form);
 
       const response = await API.post("/login", body, config);
+      console.log(response);
 
       dispatch({
         type: "LOGIN_SUCCESS",
@@ -77,7 +78,7 @@ export default function ModalAuth({ show, setShow }) {
     }
   });
 
-  // ____________register
+  // register
   const [register, setRegister] = useState({
     email: "",
     password: "",

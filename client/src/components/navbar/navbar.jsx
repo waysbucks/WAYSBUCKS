@@ -18,7 +18,6 @@ import { useQuery } from "react-query";
 export default function Navbar({ counter, setShow, show }) {
   const [state] = useContext(UserContext);
   const isLogin = state.isLogin;
-  const [fore, setFore] = useState([]);
 
   let { data: cart } = useQuery("cartsCache", async () => {
     const response = await API.get("/carts-id");
@@ -28,7 +27,7 @@ export default function Navbar({ counter, setShow, show }) {
   return (
     <nav>
       <div>
-        <Link to={"/"}>
+        <Link to={state.user.status === "customer" ? "/" : "/transaction"}>
           <img src={Logo} alt="Logo" className="navbarLogo" />
         </Link>
       </div>
