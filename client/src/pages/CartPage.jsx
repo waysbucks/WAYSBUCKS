@@ -24,7 +24,7 @@ export default function CartPage() {
   const [showTrans, setShowTrans] = useState(false);
   // const handleShow = () => setShowTrans(true);
   const handleClose = () => setShowTrans(false);
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   // cart
   let { data: cart, refetch } = useQuery("cartsCache", async () => {
@@ -55,12 +55,15 @@ export default function CartPage() {
       headers: {
         "Content-type": "application/json",
       },
-    }; 
-     // Insert transaction data
-    const responses = await API.post("/transaction", config);
-    
-    const token = responses.data.token;
-    
+    };
+    // Insert transaction data
+    const body = JSON.stringify(form);
+
+    const response = await API.patch("/transaction", body, config);
+    console.log(response);
+
+    const token = response.data.token;
+
     window.snap.pay(token, {
       onSuccess: function (result) {
         /* You may add your own implementation here */
@@ -81,14 +84,9 @@ export default function CartPage() {
         alert("you closed the popup without finishing the payment");
       },
     });
-    
-    const body = JSON.stringify(form);
-    
-    const response = await API.patch("/transaction", body, config);
-    console.log(response);
   });
   //
-  
+
   useEffect(() => {
     //change this to the script source you want to load, for example this is snap.js sandbox env
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";

@@ -197,7 +197,6 @@ func (h handlerTransaction) DeleteTransaction(w http.ResponseWriter, r *http.Req
 	json.NewEncoder(w).Encode(response)
 }
 
-
 func (h *handlerTransaction) GetUserTransaction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content type", "application/json")
 
@@ -218,43 +217,42 @@ func (h *handlerTransaction) GetUserTransaction(w http.ResponseWriter, r *http.R
 //
 func (h *handlerTransaction) Notification(w http.ResponseWriter, r *http.Request) {
 	var notificationPayload map[string]interface{}
-  
+
 	err := json.NewDecoder(r.Body).Decode(&notificationPayload)
 	if err != nil {
-	  w.WriteHeader(http.StatusBadRequest)
-	  response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-	  json.NewEncoder(w).Encode(response)
-	  return
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
 	}
-  
+
 	transactionStatus := notificationPayload["transaction_status"].(string)
 	fraudStatus := notificationPayload["fraud_status"].(string)
 	orderId := notificationPayload["order_id"].(string)
-  
-	if transactionStatus == "capture" {
-	  if fraudStatus == "challenge" {
-		// TODO set transaction status on your database to 'challenge'
-		// e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
-		h.TransactionRepository.UpdateTransactions("pending",  orderId)
-	  } else if fraudStatus == "accept" {
-		// TODO set transaction status on your database to 'success'
-		h.TransactionRepository.UpdateTransactions("success",  orderId)
-	  }
-	} else if transactionStatus == "settlement" {
-	  // TODO set transaction status on your databaase to 'success'
-	  h.TransactionRepository.UpdateTransactions("success",  orderId)
-	} else if transactionStatus == "deny" {
-	  // TODO you can ignore 'deny', because most of the time it allows payment retries
-	  // and later can become success
-	  h.TransactionRepository.UpdateTransactions("failed",  orderId)
-	} else if transactionStatus == "cancel" || transactionStatus == "expire" {
-	  // TODO set transaction status on your databaase to 'failure'
-	  h.TransactionRepository.UpdateTransactions("failed",  orderId)
-	} else if transactionStatus == "pending" {
-	  // TODO set transaction status on your databaase to 'pending' / waiting payment
-	  h.TransactionRepository.UpdateTransactions("pending",  orderId)
-	}
-  
-	w.WriteHeader(http.StatusOK)
-  }
 
+	if transactionStatus == "capture" {
+		if fraudStatus == "challenge" {
+			// TODO set transaction status on your database to 'challenge'
+			// e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
+			h.TransactionRepository.UpdateTransactions("pending", orderId)
+		} else if fraudStatus == "accept" {
+			// TODO set transaction status on your database to 'success'
+			h.TransactionRepository.UpdateTransactions("success", orderId)
+		}
+	} else if transactionStatus == "settlement" {
+		// TODO set transaction status on your databaase to 'success'
+		h.TransactionRepository.UpdateTransactions("success", orderId)
+	} else if transactionStatus == "deny" {
+		// TODO you can ignore 'deny', because most of the time it allows payment retries
+		// and later can become success
+		h.TransactionRepository.UpdateTransactions("failed", orderId)
+	} else if transactionStatus == "cancel" || transactionStatus == "expire" {
+		// TODO set transaction status on your databaase to 'failure'
+		h.TransactionRepository.UpdateTransactions("failed", orderId)
+	} else if transactionStatus == "pending" {
+		// TODO set transaction status on your databaase to 'pending' / waiting payment
+		h.TransactionRepository.UpdateTransactions("pending", orderId)
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

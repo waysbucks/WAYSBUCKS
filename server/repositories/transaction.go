@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"waysbucks/models"
 
 	"gorm.io/gorm"
@@ -13,8 +12,8 @@ type TransactionRepository interface {
 	CreateTransaction(transaction models.Transaction) (models.Transaction, error)
 	UpdateTransaction(transaction models.Transaction) (models.Transaction, error)
 	DeleteTransaction(transaction models.Transaction) (models.Transaction, error)
-	GetUserTransaction(ID int) (models.User, error)
-	UpdateTransactions(status string, ID string) (error)
+	GetUserTransaction(ID int) ([]models.User, error)
+	UpdateTransactions(status string, ID string) error
 }
 
 func RepositoryTransaction(db *gorm.DB) *repository {
@@ -50,30 +49,29 @@ func (r *repository) DeleteTransaction(transaction models.Transaction) (models.T
 	return transaction, err
 }
 
-func (r *repository) GetUserTransaction(UserID int) ([]models.Transaction, error) {
-	var user []models.Transaction
+func (r *repository) GetUserTransaction(UserID int) ([]models.User, error) {
+	var user []models.User
 	err := r.db.Debug().Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&user, "user_id  = ?", UserID).Error
-	fmt.Println(err)
 
 	return user, err
 }
 
 //
-func (r *repository) UpdateTransactions(status string, ID string) (error) {
-  var transaction models.Transaction
-  r.db.Preload("Product").First(&transaction, ID)
+func (r *repository) UpdateTransactions(status string, ID string) error {
+	var transaction models.Transaction
+	r.db.Preload("Product").First(&transaction, ID)
 
-  // If is different & Status is "success" decrement product quantity
-  if status != transaction.Status && status == "success" {
-    var product models.Product
-    r.db.First(&product, transaction.ID)
-    // product.Qty = product.Qty - 1
-    r.db.Save(&product)
-  }
+	// If is different & Status is "success" decrement product quantity
+	if status != transaction.Status && status == "success" {
+		var product models.Product
+		r.db.First(&product, transaction.ID)
+		// product.Qty = product.Qty - 1
+		r.db.Save(&product)
+	}
 
-  transaction.Status = status
+	transaction.Status = status
 
-  err := r.db.Save(&transaction).Error
+	err := r.db.Save(&transaction).Error
 
-  return err
+	return err
 }
