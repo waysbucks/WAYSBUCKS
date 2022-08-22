@@ -9,9 +9,6 @@ import Rupiah from "rupiah-format";
 import Logo from "../../assets/Logo.svg";
 import { API } from "../../config/api";
 
-// fakedata
-import dummyTransaction from "../../DataDummy/dummyTransaction";
-
 export default function ModalTransaction({ showTrans, close, id }) {
   let { data: transaction } = useQuery("productsCache", async () => {
     const response = await API.get("/transaction/" + id);
@@ -63,7 +60,9 @@ export default function ModalTransaction({ showTrans, close, id }) {
           <span>
             <p>{transaction?.status}</p>
           </span>
-          <p className="profileSubTotal">Sub Total : Rp.69.000</p>
+          <p className="profileSubTotal">
+            Sub Total : {Rupiah.convert(transaction?.total)}
+          </p>
         </div>
       </div>
     </Modal>

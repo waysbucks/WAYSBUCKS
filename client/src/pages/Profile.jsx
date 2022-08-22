@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 // import { API } from "../config/api";
 
 // file
-import PhotoProfile from "../assets/Rectangle 12.png";
+import PhotoProfile from "../assets/blank-profile.png";
 import Logo from "../assets/Logo.svg";
 
 // component
@@ -32,6 +32,8 @@ export default function Profile() {
 
   let { data: Profile, refetch } = useQuery("profileCache", async () => {
     const response = await API.get("/user-profile");
+    console.log(response);
+
     return response.data.data.profile;
   });
 
@@ -44,7 +46,7 @@ export default function Profile() {
           <ModalProfile refetch={refetch} />
 
           <div className="biodata">
-            <img src={Profile.image} alt="Profile" />
+            <img src={Profile?.image} alt="Profile" />
             <ul>
               <li className="biodataTitle">FULL NAME</li>
               <li className="biodataContent">{state.user.name}</li>
@@ -102,6 +104,8 @@ export default function Profile() {
                     ? "contentCardRight Success"
                     : item?.status === "Cancel"
                     ? "contentCardRight Cancel"
+                    : item?.status === "pending"
+                    ? "contentCardRight Pending"
                     : "contentCardRight Otw"
                 }
               >

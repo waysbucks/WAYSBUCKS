@@ -403,6 +403,12 @@ hr{
     background: #00d0ff32;
 }
 
+.Pending span {
+    margin-top: 20px;
+    display: block;
+    background: #d1c00ba5;
+}
+
 .Cancel span {
     margin-top: 20px;
     display: block;

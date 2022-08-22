@@ -30,8 +30,6 @@ export default function Dropdown() {
     return response.data.data;
   });
 
-  console.log("aaa", profile);
-
   return (
     <NavDropdown
       title={
