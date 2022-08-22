@@ -79,7 +79,7 @@ export default function LandingPage() {
                   </Link>
                   <div className={cssModules.card2}>
                     <p className={cssModules.text1}>
-                      {item.title.substring(0, 20)}
+                      {item.title.substring(0, 17)}...
                     </p>
                     <p className={cssModules.text2}>
                       {Rupiah.convert(item.price)}

@@ -63,7 +63,7 @@ export default function Transaction() {
                         ? "tableSuccess"
                         : item?.status === "Cancel"
                         ? "tableCancel"
-                        : item?.status === "Waiting Approve"
+                        : item?.status === "pending"
                         ? "tableWaiting"
                         : "tableOtw"
                     }
