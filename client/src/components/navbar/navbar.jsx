@@ -19,9 +19,14 @@ export default function Navbar({ counter, setShow, show }) {
   const [state] = useContext(UserContext);
   const isLogin = state.isLogin;
 
-  let { data: cart } = useQuery("cartsCache", async () => {
-    const response = await API.get("/carts-id");
-    return response.data.data;
+  const [bubble, setBubble] = useState([]);
+
+  useEffect(() => {
+    API.get("/carts-id")
+      .then((res) => {
+        setBubble(res.data.data);
+      })
+      .catch((err) => console.log("error", err));
   });
 
   return (
@@ -35,14 +40,14 @@ export default function Navbar({ counter, setShow, show }) {
         <div className="navbarRight">
           <div
             className={
-              cart === undefined
+              bubble === undefined
                 ? "d-none"
-                : cart?.length === 0
+                : bubble?.length === 0
                 ? "d-none"
                 : "circle"
             }
           >
-            {cart?.length}
+            {bubble?.length}
           </div>
           <Link to={"/cart"}>
             <img

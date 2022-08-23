@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	dto "waysbucks/dto/result"
@@ -44,7 +43,6 @@ func (h *handlersUser) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
 	id := int(userInfo["id"].(float64))
-	fmt.Println(id)
 
 	user, err := h.UserRepository.GetUser(id)
 	if err != nil {

@@ -10,6 +10,7 @@ import { API } from "../config/api"; //DB
 import cssModules from "../styles/home.module.css"; // style
 import landing_2 from "../assets/land.2.png"; // file
 import Navbar from "../components/navbar/navbar"; // component
+import { useEffect } from "react";
 
 export default function LandingPage() {
   // modal login

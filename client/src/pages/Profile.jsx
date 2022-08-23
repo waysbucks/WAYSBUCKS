@@ -46,7 +46,14 @@ export default function Profile() {
           <ModalProfile refetch={refetch} />
 
           <div className="biodata">
-            <img src={Profile?.image} alt="Profile" />
+            <img
+              src={
+                Profile?.image === "http://localhost:5000/uploads/"
+                  ? PhotoProfile
+                  : Profile?.image
+              }
+              alt="Profile"
+            />
             <ul>
               <li className="biodataTitle">FULL NAME</li>
               <li className="biodataContent">{state.user.name}</li>

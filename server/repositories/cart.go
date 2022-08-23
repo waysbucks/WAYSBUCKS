@@ -15,6 +15,8 @@ type CartRepository interface {
 	CreateTransactionID(transaction models.Transaction) (models.Transaction, error)
 	FindToppingsID(ToppingID []int) ([]models.Topping, error)
 	FindCartsTransaction(TrxID int) ([]models.Cart, error)
+	GetTransactionID() (models.Transaction, error)
+	GetIDTransaction() (models.Transaction, error)
 }
 
 // type repository struct {
@@ -65,7 +67,7 @@ func (r *repository) CreateTransactionID(transaction models.Transaction) (models
 
 func (r *repository) FindToppingsID(ToppingID []int) ([]models.Topping, error) {
 	var toppings []models.Topping
-	err := r.db.Debug().Find(&toppings, ToppingID).Error
+	err := r.db.Find(&toppings, ToppingID).Error
 
 	return toppings, err
 }
@@ -79,7 +81,19 @@ func (r *repository) FindTransactionID(TransactionID []int) ([]models.Topping, e
 
 func (r *repository) FindCartsTransaction(TrxID int) ([]models.Cart, error) {
 	var carts []models.Cart
-	err := r.db.Preload("Product").Preload("Topping").Debug().Find(&carts, "transaction_id = ?", TrxID).Error
+	err := r.db.Preload("Product").Preload("Topping").Find(&carts, "transaction_id = ?", TrxID).Error
 
 	return carts, err
+}
+
+func (r *repository) GetTransactionID() (models.Transaction, error) {
+	var transaction models.Transaction
+	err := r.db.Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&transaction, "status = ?", "waiting").Error
+	return transaction, err
+}
+
+func (r *repository) GetIDTransaction() (models.Transaction, error) {
+	var transaction models.Transaction
+	err := r.db.Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&transaction, "status = ?", "waiting").Error
+	return transaction, err
 }

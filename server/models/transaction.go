@@ -4,7 +4,7 @@ import "time"
 
 type Transaction struct {
 	ID        int64     `json:"id"`
-	UserID    int       `json:"user_id"`
+	UserID    int       `json:"user_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	User      User      `json:"user"`
 	Status    string    `json:"status"`
 	Total     int       `json:"total"`

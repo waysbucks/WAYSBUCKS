@@ -80,6 +80,9 @@ export default function DetailProductPage() {
           "Content-type": "application/json",
         },
       };
+
+      await API.post("/transaction", config);
+
       const body = JSON.stringify({
         topping_id: topping_id,
         subtotal: subtotal,
@@ -89,7 +92,7 @@ export default function DetailProductPage() {
 
       await API.post("/cart", body, config);
 
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       console.log(error);
     }
