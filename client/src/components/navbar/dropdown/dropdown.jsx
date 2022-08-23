@@ -12,6 +12,8 @@ import AddToping from "../../../assets/topping 1.svg";
 import Logout from "../../../assets/logout 1.png";
 import { API } from "../../../config/api";
 import { useQuery } from "react-query";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Dropdown() {
   // logout
@@ -25,19 +27,29 @@ export default function Dropdown() {
     navigate("/");
   };
 
-  let { data: profile } = useQuery("profileCache", async () => {
-    const response = await API.get("/user-profile");
-    return response.data.data;
+  const [photo, setPhoto] = useState({});
+
+  useEffect(() => {
+    API.get("/user-profile")
+      .then((res) => {
+        setPhoto(res.data.data.profile);
+      })
+      .catch((err) => console.log("error", err));
   });
+
+  // let { data: profile } = useQuery("profileCache", async () => {
+  //   const response = await API.get("/user-profile");
+  //   return response.data.data;
+  // });
 
   return (
     <NavDropdown
       title={
         <img
           src={
-            profile?.profile?.image === "http://localhost:5000/uploads/"
+            photo?.image === "http://localhost:5000/uploads/"
               ? PhotoProfile
-              : profile?.profile?.image
+              : photo?.image
           }
           alt="photoProfile"
           className="navbarPhoto"

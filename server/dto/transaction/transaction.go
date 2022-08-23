@@ -3,7 +3,9 @@ package transactiondto
 import "waysbucks/models"
 
 type CreateTransaction struct {
-	UserID int `json:"user_id" form:"user_id" validate:"required"`
+	ID     int64  `json:"id"`
+	UserID int    `json:"user_id" form:"user_id"`
+	Status string `json:"status"`
 }
 
 type UpdateTransaction struct {

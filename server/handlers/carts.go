@@ -10,7 +10,6 @@ import (
 	"waysbucks/repositories"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 )
 
@@ -63,9 +62,6 @@ func (h *handlersCart) GetCart(w http.ResponseWriter, r *http.Request) {
 func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
-	idTrans := int(userInfo["time"].(float64))
-
 	request := new(cartdto.CreateCart)
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -82,17 +78,11 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// var toppingId []int
-	// for _, r := range r.FormValue("toppingId") {
-	// 	if int(r-'0') >= 0 {
-	// 		toppingId = append(toppingId, int(r-'0'))
-	// 	}
-	// }
-	// id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	transaction, err := h.CartRepository.GetTransactionID()
 
 	requestForm := models.Cart{
 		ProductID:     request.ProductID,
-		TransactionID: idTrans,
+		TransactionID: int(transaction.ID),
 		QTY:           request.QTY,
 		SubTotal:      request.SubTotal,
 		ToppingID:     request.ToppingID,
@@ -112,7 +102,7 @@ func (h *handlersCart) CreateCart(w http.ResponseWriter, r *http.Request) {
 
 	cart := models.Cart{
 		ProductID:     request.ProductID,
-		TransactionID: idTrans,
+		TransactionID: int(transaction.ID),
 		QTY:           request.QTY,
 		SubTotal:      request.SubTotal,
 		Topping:       topping,
@@ -193,10 +183,8 @@ func (h *handlersCart) DeleteCart(w http.ResponseWriter, r *http.Request) {
 func (h *handlersCart) FindCartsByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
-	idTrans := int(userInfo["time"].(float64))
-
-	cart, err := h.CartRepository.FindCartsTransaction(idTrans)
+	transaction, err := h.CartRepository.GetIDTransaction()
+	cart, err := h.CartRepository.FindCartsTransaction(int(transaction.ID))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}

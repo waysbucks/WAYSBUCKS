@@ -47,17 +47,17 @@ export default function CartPage() {
     status: "pending",
     total: resultTotal,
   };
+
   const handleSubmit = useMutation(async (e) => {
     const config = {
       headers: {
         "Content-type": "application/json",
       },
     };
+
     // Insert transaction data
     const body = JSON.stringify(form);
-
     const response = await API.patch("/transaction", body, config);
-
     const token = response.data.data.token;
 
     window.snap.pay(token, {
