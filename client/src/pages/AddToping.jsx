@@ -2,30 +2,24 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
-// component
-import Navbar from "../components/navbar/navbar";
-
 import { API } from "../config/api";
 import { useMutation } from "react-query";
+
+// component
+import Navbar from "../components/navbar/Navbar";
+
 // file
 import paperClip from "../assets/paperClip.png";
 
 export default function AddToping() {
-  // const [product, setProduct] = useState({});
   const [preview, setPreview] = useState(null);
   const [previewName, setPreviewName] = useState("");
-  console.log(previewName);
-  // const [form,setFrom]
 
-  // Create variabel for store data with useState here ...
   const [form, setform] = useState({
     image: "",
     title: "",
     price: "",
   }); //Store product data
-
-  //handle chahnge data on from
 
   //handle chahnge data on from
   const handleChange = (e) => {
@@ -36,14 +30,12 @@ export default function AddToping() {
     });
 
     // Create image url for preview
-    console.log(e.target.files);
     if (e.target.type === "file") {
       let url = URL.createObjectURL(e.target.files[0]);
       setPreview(url);
       setPreviewName(e.target.files[0].name);
     }
   };
-  console.log(form);
 
   let navigate = useNavigate();
 
@@ -65,7 +57,6 @@ export default function AddToping() {
 
       // Insert category data
       const response = await API.post("/topping", formData, config);
-      console.log(response);
 
       navigate("/transaction");
     } catch (error) {

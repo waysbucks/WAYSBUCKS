@@ -1,23 +1,19 @@
-// dependencies
 import { useContext, useState } from "react";
 import Rupiah from "rupiah-format";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useQuery } from "react-query";
-//init DB
 import { API } from "../config/api"; //DB
-//
+
 import cssModules from "../styles/home.module.css"; // style
-import landing_2 from "../assets/land.2.png"; // file
-import Navbar from "../components/navbar/navbar"; // component
-import { useEffect } from "react";
+import HeroImage from "../assets/Hero-Image.png"; // file
+import Navbar from "../components/navbar/Navbar"; // component
 
 export default function LandingPage() {
   // modal login
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(true);
-  //
   const [state] = useContext(UserContext); // user data
+  const handleClick = () => setShow(true);
 
   // Fetching product data from database
   let { data: products } = useQuery("productsCache", async () => {
@@ -44,20 +40,22 @@ export default function LandingPage() {
                     <br />
                     grocery and drive-thru location remaining open.
                     <br />
-                    <strong className="cssModules.>">Waysbucks</strong> Driver
-                    is also available <br />
+                    <strong>Waysbucks</strong> Driver is also available <br />
                     <br />
                     let's Orderr...
                   </p>
                 </span>
               </span>
               <div>
-                <img className={cssModules.pitc} src={landing_2} alt="ok" />
+                <img
+                  className={cssModules.pitc}
+                  src={HeroImage}
+                  alt="HeroBanner"
+                />
               </div>
             </div>
           </div>
         </section>
-        {/* <hr /> */}
         <section>
           <span className={cssModules.textofdown}>
             <p>Let's Order</p>
@@ -75,7 +73,7 @@ export default function LandingPage() {
                     <img
                       className={cssModules.imageP}
                       src={item.image}
-                      alt="test"
+                      alt="ProductImage"
                     />
                   </Link>
                   <div className={cssModules.card2}>

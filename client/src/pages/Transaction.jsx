@@ -3,30 +3,28 @@ import React, { useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { useQuery } from "react-query";
 import Rupiah from "rupiah-format";
+import { API } from "../config/api";
 
 // component
 import ModalTransaction from "../components/modal/ModalTransaction";
-import Navbar from "../components/navbar/navbar";
-import { API } from "../config/api";
+import Navbar from "../components/navbar/Navbar";
 
 export default function Transaction() {
   // modal
   const [showTrans, setShowTrans] = useState(false);
   const [idOrder, setIdOrder] = useState(null);
 
+  const handleClose = () => setShowTrans(false);
   const handleShow = (id) => {
     setIdOrder(id);
     setShowTrans(true);
   };
-  const handleClose = () => setShowTrans(false);
 
   // Fetching product data from database
   let { data: transactions } = useQuery("transactionsCache", async () => {
     const response = await API.get("/transactions");
     return response.data.data;
   });
-
-  console.log(transactions);
 
   return (
     <>
@@ -50,7 +48,7 @@ export default function Transaction() {
                 <tr
                   onClick={() => handleShow(item?.id)}
                   key={index}
-                  className={item.status === "" ? "fd" : ""}
+                  className={item.status === "" ? "dnone" : ""}
                 >
                   <td>{index + 1}</td>
                   <td>{item?.user.name}</td>

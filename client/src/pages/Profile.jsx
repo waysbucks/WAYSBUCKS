@@ -2,21 +2,19 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import QRCode from "react-qr-code";
-// import { useQuery } from "react-query";
-// import { API } from "../config/api";
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
+import Rupiah from "rupiah-format";
+import { API } from "../config/api";
+import { useQuery } from "react-query";
 
 // file
 import PhotoProfile from "../assets/blank-profile.png";
 import Logo from "../assets/Logo.svg";
 
 // component
-import Navbar from "../components/navbar/navbar";
+import Navbar from "../components/navbar/Navbar";
 import ModalProfile from "../components/modal/ModalProfile";
-import { UserContext } from "../context/UserContext";
-import { useContext } from "react";
-import Rupiah from "rupiah-format";
-import { API } from "../config/api";
-import { useQuery } from "react-query";
 //
 
 export default function Profile() {
@@ -32,7 +30,6 @@ export default function Profile() {
 
   let { data: Profile, refetch } = useQuery("profileCache", async () => {
     const response = await API.get("/user-profile");
-    console.log(response);
 
     return response.data.data.profile;
   });

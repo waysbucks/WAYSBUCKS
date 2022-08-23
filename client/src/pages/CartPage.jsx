@@ -1,7 +1,9 @@
 // dependencies
-import React, { useState } from "react";
 import Rupiah from "rupiah-format";
 import { useEffect } from "react";
+import { useMutation, useQuery } from "react-query";
+import { API } from "../config/api";
+import { useNavigate } from "react-router-dom";
 
 // style
 import cartModules from "../styles/cart.module.css";
@@ -10,17 +12,9 @@ import cartModules from "../styles/cart.module.css";
 import trash from "../assets/trash.svg";
 
 // component
-import ModalCart from "../components/modal/modalCart";
-import Navbar from "../components/navbar/navbar";
-import { useMutation, useQuery } from "react-query";
-import { API } from "../config/api";
-import { useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar/Navbar";
 
 export default function CartPage() {
-  // modal
-  const [showTrans, setShowTrans] = useState(false);
-  // const handleShow = () => setShowTrans(true);
-  const handleClose = () => setShowTrans(false);
   let navigate = useNavigate();
 
   // cart
@@ -35,9 +29,7 @@ export default function CartPage() {
   }, 0);
 
   // remove
-
   let handleDelete = async (id) => {
-    console.log(id);
     await API.delete(`/cart/` + id);
     refetch();
   };
@@ -62,21 +54,17 @@ export default function CartPage() {
 
     window.snap.pay(token, {
       onSuccess: function (result) {
-        /* You may add your own implementation here */
         console.log(result);
         navigate("/profile");
       },
       onPending: function (result) {
-        /* You may add your own implementation here */
         console.log(result);
         navigate("/profile");
       },
       onError: function (result) {
-        /* You may add your own implementation here */
         console.log(result);
       },
       onClose: function () {
-        /* You may add your own implementation here */
         alert("you closed the popup without finishing the payment");
       },
     });
@@ -172,7 +160,6 @@ export default function CartPage() {
               </div>
             </div>
           </div>
-          <ModalCart showTrans={showTrans} close={handleClose} />
         </section>
       </div>
     </>

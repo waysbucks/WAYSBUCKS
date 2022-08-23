@@ -92,11 +92,6 @@ func (h *handlersAuth) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := models.User{
-		Email:    request.Email,
-		Password: request.Password,
-	}
-
 	user, err := h.AuthRepository.Login(request.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
