@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"waysbucks/database"
 	"waysbucks/pkg/mysql"
 	"waysbucks/routes"
@@ -10,7 +11,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-
 )
 
 func main() {
@@ -33,9 +33,12 @@ func main() {
 	var AllowedOrigins = handlers.AllowedOrigins([]string{"*"})
 
 	r.PathPrefix("/uploads").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads"))))
-	//try
-	fmt.Println("Server Running on localhost:5000")
-	http.ListenAndServe("localhost:5000", handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
+
+	// Modify 1 line this below code get port from env ...
+	var port = os.Getenv("PORT")
+
+	fmt.Println("Server Running on localhost:"+port)
+	http.ListenAndServe(":"+port, handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
 }
 
 
