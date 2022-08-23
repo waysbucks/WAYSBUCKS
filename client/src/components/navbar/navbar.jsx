@@ -1,21 +1,20 @@
 // dependencies
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { API } from "../../config/api";
+import { useState } from "react";
 
 // components
-import Dropdown from "./dropdown/dropdown";
+import Dropdown from "./dropdown/Dropdown";
 import ModalAuth from "../modal/ModalAuth";
 
 // files
 import Logo from "../../assets/Logo.svg";
-import Cart from "../../assets/Vector.svg";
-import { useEffect } from "react";
-import { API } from "../../config/api";
-import { useState } from "react";
-import { useQuery } from "react-query";
+import Cart from "../../assets/cart.svg";
 
-export default function Navbar({ counter, setShow, show }) {
+export default function Navbar({ setShow, show }) {
   const [state] = useContext(UserContext);
   const isLogin = state.isLogin;
 
