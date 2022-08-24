@@ -1,21 +1,23 @@
 // dependencies
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Rupiah from "rupiah-format";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { API } from "../config/api";
 
 // style
 import productModules from "../styles/product.module.css";
 
 // file
-import checkToping from "../assets/checkToping.svg";
+import checkToping from "../assets/check-mark.svg";
 
 // component
-import Navbar from "../components/navbar/navbar";
-import { API } from "../config/api";
+import Navbar from "../components/navbar/Navbar";
 
 export default function DetailProductPage() {
-  const navigate = useNavigate();
+  const title = "Product";
+  document.title = "Waysbucks | " + title;
+
   // check
   const [show, setShow] = useState(false);
 
@@ -92,7 +94,8 @@ export default function DetailProductPage() {
 
       await API.post("/cart", body, config);
 
-      // navigate("/");
+      setIdToping([]);
+      setToping([]);
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +108,7 @@ export default function DetailProductPage() {
         <section>
           <div className={productModules.wrap}>
             <div className={productModules.left}>
-              <img src={product?.image} alt="oke" />
+              <img src={product?.image} alt="ProductImage" />
             </div>
             <div className={productModules.right}>
               <span className={productModules.name}>
@@ -136,7 +139,7 @@ export default function DetailProductPage() {
                         />
                         <img
                           src={item?.image}
-                          alt="1"
+                          alt="ToppingImage"
                           onClick={handleCheck}
                           className={productModules.imageTopping}
                         />

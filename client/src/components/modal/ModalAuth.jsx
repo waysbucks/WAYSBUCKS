@@ -1,6 +1,5 @@
 // dependencies
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
 import { useMutation } from "react-query";
@@ -23,19 +22,6 @@ export default function ModalAuth({ show, setShow }) {
     setShows(false);
     setShow(true);
   };
-
-  // functional
-  // const [login, setLogin] = useState({});
-
-  // const handleChange = (e) => {
-  //   setLogin({
-  //     ...login,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
-  // auth
-  // const navigate = useNavigate();
 
   // _________login
   const [state, dispatch] = useContext(UserContext);
@@ -65,7 +51,6 @@ export default function ModalAuth({ show, setShow }) {
       const body = JSON.stringify(form);
 
       const response = await API.post("/login", body, config);
-      console.log(response);
 
       dispatch({
         type: "LOGIN_SUCCESS",

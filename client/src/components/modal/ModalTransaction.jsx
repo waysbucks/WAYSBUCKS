@@ -1,19 +1,24 @@
 // dependencies
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import QRCode from "react-qr-code";
-import { useQuery } from "react-query";
 import Rupiah from "rupiah-format";
+import { API } from "../../config/api";
 
 // logo
 import Logo from "../../assets/Logo.svg";
-import { API } from "../../config/api";
 
 export default function ModalTransaction({ showTrans, close, id }) {
-  let { data: transaction } = useQuery("productsCache", async () => {
-    const response = await API.get("/transaction/" + id);
-    console.log(response);
-    return response?.data?.data;
+  const [transaction, serTransaction] = useState([]);
+
+  useEffect(() => {
+    API.get("/transaction/" + id)
+      .then((res) => {
+        serTransaction(res.data.data);
+      })
+      .catch((err) => console.log("error", err));
   });
 
   return (

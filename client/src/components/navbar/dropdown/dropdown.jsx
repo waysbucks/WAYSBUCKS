@@ -3,6 +3,9 @@ import React, { useContext } from "react";
 import { NavDropdown } from "react-bootstrap";
 import { UserContext } from "../../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import { API } from "../../../config/api";
 
 // files
 import PhotoProfile from "../../../assets/blank-profile.png";
@@ -10,10 +13,6 @@ import Profile from "../../../assets/user 2.svg";
 import AddProduct from "../../../assets/AddProduct.svg";
 import AddToping from "../../../assets/topping 1.svg";
 import Logout from "../../../assets/logout 1.png";
-import { API } from "../../../config/api";
-import { useQuery } from "react-query";
-import { useState } from "react";
-import { useEffect } from "react";
 
 export default function Dropdown() {
   // logout
@@ -37,11 +36,6 @@ export default function Dropdown() {
       .catch((err) => console.log("error", err));
   });
 
-  // let { data: profile } = useQuery("profileCache", async () => {
-  //   const response = await API.get("/user-profile");
-  //   return response.data.data;
-  // });
-
   return (
     <NavDropdown
       title={
@@ -58,7 +52,7 @@ export default function Dropdown() {
       className="navImg"
     >
       <NavDropdown.Item
-        className={state.user.status === "admin" ? "fd" : "customer"}
+        className={state.user.status === "admin" ? "dnone" : "customer"}
       >
         <Link to="/profile" className="navbarItem navbarProfile">
           <img src={Profile} alt="profile" className="d-flex dropdown-img" />
@@ -67,7 +61,7 @@ export default function Dropdown() {
       </NavDropdown.Item>
 
       <NavDropdown.Item
-        className={state.user.status === "admin" ? "mb-2 mt-2 ps-3" : "fd"}
+        className={state.user.status === "admin" ? "mb-2 mt-2 ps-3" : "dnone"}
       >
         <Link to="/add-product" className="navbarItem">
           <img
@@ -80,7 +74,7 @@ export default function Dropdown() {
       </NavDropdown.Item>
 
       <NavDropdown.Item
-        className={state.user.status === "admin" ? "mb-2 mt-2 ps-3" : "fd"}
+        className={state.user.status === "admin" ? "mb-2 mt-2 ps-3" : "dnone"}
       >
         <Link to="/add-toping" className="navbarItem">
           <img

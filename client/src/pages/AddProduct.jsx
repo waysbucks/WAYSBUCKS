@@ -7,23 +7,24 @@ import { useMutation } from "react-query";
 import { API } from "../config/api";
 
 // component
-import Navbar from "../components/navbar/navbar";
+import Navbar from "../components/navbar/Navbar";
 
 // file
 import paperClip from "../assets/paperClip.png";
 import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
-  // const [product, setProduct] = useState({});
+  const title = "Add Product";
+  document.title = "Waysbucks | " + title;
+
   const [previewName, setPreviewName] = useState(""); //name
   const [preview, setPreview] = useState(null); //image
 
-  // Create variabel for store data with useState here ...
   const [form, setForm] = useState({
     image: "",
     title: "",
     price: "",
-  }); //Store product data
+  }); //Store data product
 
   //handle chahnge data on from
   const handleChange = (e) => {
@@ -32,6 +33,7 @@ export default function AddProduct() {
       [e.target.name]:
         e.target.type === "file" ? e.target.files : e.target.value,
     });
+
     // Create image url for preview
     if (e.target.type === "file") {
       let url = URL.createObjectURL(e.target.files[0]);
@@ -59,8 +61,7 @@ export default function AddProduct() {
       formData.set("price", form.price);
 
       // Insert category data
-      const response = await API.post("/product", formData, config);
-      console.log(response);
+      await API.post("/product", formData, config);
 
       navigate("/transaction");
     } catch (error) {

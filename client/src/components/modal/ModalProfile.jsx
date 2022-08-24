@@ -1,10 +1,8 @@
 import React from "react";
-import { useContext } from "react";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useMutation } from "react-query";
 import { API } from "../../config/api";
-import { UserContext } from "../../context/UserContext";
 import paperClip from "../../assets/paperClip.png";
 
 export default function ModalProfile({ refetch }) {
