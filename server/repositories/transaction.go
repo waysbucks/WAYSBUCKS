@@ -62,7 +62,7 @@ func (r *repository) DeleteTransaction(transaction models.Transaction) (models.T
 
 func (r *repository) GetUserTransaction(UserID int) ([]models.Transaction, error) {
 	var user []models.Transaction
-	err := r.db.Debug().Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&user, "user_id  = ?", UserID).Error
+	err := r.db.Preload("User").Preload("Carts").Preload("Carts.Product").Preload("Carts.Topping").Find(&user, "user_id  = ?", UserID).Error
 
 	return user, err
 }

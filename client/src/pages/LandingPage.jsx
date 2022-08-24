@@ -10,6 +10,8 @@ import HeroImage from "../assets/Hero-Image.png"; // file
 import Navbar from "../components/navbar/Navbar"; // component
 
 export default function LandingPage() {
+  document.title = "Waysbucks";
+
   // modal login
   const [show, setShow] = useState(false);
   const [state] = useContext(UserContext); // user data

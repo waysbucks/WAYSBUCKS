@@ -15,6 +15,9 @@ import trash from "../assets/trash.svg";
 import Navbar from "../components/navbar/Navbar";
 
 export default function CartPage() {
+  const title = "Cart";
+  document.title = "Waysbucks | " + title;
+
   let navigate = useNavigate();
 
   // cart

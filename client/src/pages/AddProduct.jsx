@@ -14,6 +14,9 @@ import paperClip from "../assets/paperClip.png";
 import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
+  const title = "Add Product";
+  document.title = "Waysbucks | " + title;
+
   const [previewName, setPreviewName] = useState(""); //name
   const [preview, setPreview] = useState(null); //image
 

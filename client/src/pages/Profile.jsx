@@ -18,6 +18,9 @@ import ModalProfile from "../components/modal/ModalProfile";
 //
 
 export default function Profile() {
+  const title = "Profile";
+  document.title = "Waysbucks | " + title;
+
   const [state] = useContext(UserContext);
 
   let { data: ProfileTransactions } = useQuery(

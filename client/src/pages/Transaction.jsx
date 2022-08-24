@@ -10,6 +10,9 @@ import ModalTransaction from "../components/modal/ModalTransaction";
 import Navbar from "../components/navbar/Navbar";
 
 export default function Transaction() {
+  const title = "Income Transaction";
+  document.title = "Waysbucks | " + title;
+
   // modal
   const [showTrans, setShowTrans] = useState(false);
   const [idOrder, setIdOrder] = useState(null);

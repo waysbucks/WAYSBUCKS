@@ -27,7 +27,7 @@ func (r *repository) FindProfiles() ([]models.Profile, error) {
 
 func (r *repository) GetProfile(ID int) (models.Profile, error) {
 	var profile models.Profile
-	err := r.db.Debug().Preload("User").First(&profile, ID).Error
+	err := r.db.Preload("User").First(&profile, ID).Error
 
 	return profile, err
 }

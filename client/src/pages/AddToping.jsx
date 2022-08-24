@@ -12,6 +12,9 @@ import Navbar from "../components/navbar/Navbar";
 import paperClip from "../assets/paperClip.png";
 
 export default function AddToping() {
+  const title = "Add Topping";
+  document.title = "Waysbucks | " + title;
+
   const [preview, setPreview] = useState(null);
   const [previewName, setPreviewName] = useState("");
 
@@ -56,7 +59,7 @@ export default function AddToping() {
       formData.set("price", form.price);
 
       // Insert category data
-      const response = await API.post("/topping", formData, config);
+      await API.post("/topping", formData, config);
 
       navigate("/transaction");
     } catch (error) {

@@ -15,6 +15,9 @@ import checkToping from "../assets/check-mark.svg";
 import Navbar from "../components/navbar/Navbar";
 
 export default function DetailProductPage() {
+  const title = "Product";
+  document.title = "Waysbucks | " + title;
+
   // check
   const [show, setShow] = useState(false);
 
