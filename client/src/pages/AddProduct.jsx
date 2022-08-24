@@ -24,7 +24,7 @@ export default function AddProduct() {
     image: "",
     title: "",
     price: "",
-  }); //Store product data
+  }); //Store data product
 
   //handle chahnge data on from
   const handleChange = (e) => {
