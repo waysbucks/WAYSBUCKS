@@ -7,7 +7,7 @@ import { API } from "../config/api"; //DB
 
 import cssModules from "../styles/home.module.css"; // style
 import HeroImage from "../assets/Hero-Image.png"; // file
-import Navbar from "../components/navbar/Navbar"; // component
+import Navbar from "../components/navbar/navbar"; // component
 
 export default function LandingPage() {
   document.title = "Waysbucks";

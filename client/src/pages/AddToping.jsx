@@ -6,7 +6,7 @@ import { API } from "../config/api";
 import { useMutation } from "react-query";
 
 // component
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/navbar";
 
 // file
 import paperClip from "../assets/paperClip.png";

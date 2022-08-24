@@ -13,7 +13,7 @@ import PhotoProfile from "../assets/blank-profile.png";
 import Logo from "../assets/Logo.svg";
 
 // component
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/navbar";
 import ModalProfile from "../components/modal/ModalProfile";
 //
 

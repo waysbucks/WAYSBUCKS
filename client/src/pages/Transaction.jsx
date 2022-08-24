@@ -7,7 +7,7 @@ import { API } from "../config/api";
 
 // component
 import ModalTransaction from "../components/modal/ModalTransaction";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/navbar";
 
 export default function Transaction() {
   const title = "Income Transaction";

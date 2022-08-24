@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import { API } from "../config/api";
 
 // component
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/navbar";
 
 // file
 import paperClip from "../assets/paperClip.png";

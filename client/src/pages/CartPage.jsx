@@ -12,7 +12,7 @@ import cartModules from "../styles/cart.module.css";
 import trash from "../assets/trash.svg";
 
 // componentt
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/navbar";
 
 export default function CartPage() {
   const title = "Cart";
