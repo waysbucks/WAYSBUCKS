@@ -11,7 +11,7 @@ import cartModules from "../styles/cart.module.css";
 // file
 import trash from "../assets/trash.svg";
 
-// component
+// componentt
 import Navbar from "../components/navbar/Navbar";
 
 export default function CartPage() {
@@ -81,7 +81,7 @@ export default function CartPage() {
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
     //change this according to your client-key
     const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
-    
+
     let scriptTag = document.createElement("script");
     scriptTag.src = midtransScriptUrl;
     // optional if you want to set script attribute
